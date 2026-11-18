@@ -1,0 +1,2117 @@
+{
+  "threats": [
+    {
+      "id": "threat-ip-001",
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "CISA Automated Threat Intel (Synthetic)",
+      "description": "Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.",
+      "confidence": 96,
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "isSynthetic": true,
+      "createdAt": "2026-10-15T08:30:00.000Z",
+      "updatedAt": "2026-10-28T14:20:00.000Z"
+    },
+    {
+      "id": "threat-ip-002",
+      "indicator": "194.26.29.112",
+      "type": "ip",
+      "category": "Command and Control",
+      "severity": "HIGH RISK",
+      "source": "AlienVault OTX Community (Synthetic)",
+      "description": "Active Mirai variant C2 botnet controller communicating on TCP port 48101. Associated with distributed credential stuffing campaigns.",
+      "confidence": 94,
+      "asn": "AS44034 Chang Way Technologies Co. Ltd.",
+      "country": "HK",
+      "isSynthetic": true,
+      "createdAt": "2026-10-18T11:45:00.000Z",
+      "updatedAt": "2026-10-29T09:15:00.000Z"
+    },
+    {
+      "id": "threat-ip-003",
+      "indicator": "45.33.32.156",
+      "type": "ip",
+      "category": "Suspicious Activity",
+      "severity": "MEDIUM RISK",
+      "source": "AbuseIPDB Demonstration Feed",
+      "description": "Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.",
+      "confidence": 72,
+      "asn": "AS63949 Linode, LLC",
+      "country": "US",
+      "isSynthetic": true,
+      "createdAt": "2026-10-22T14:10:00.000Z",
+      "updatedAt": "2026-10-27T16:00:00.000Z"
+    },
+    {
+      "id": "threat-ip-004",
+      "indicator": "198.51.100.42",
+      "type": "ip",
+      "category": "Malware",
+      "severity": "HIGH RISK",
+      "source": "Internal SOC Blacklist (Synthetic)",
+      "description": "Host serving second-stage Cobalt Strike beacon loader disguised as a legitimate security certificate update package.",
+      "confidence": 90,
+      "asn": "AS16509 Amazon.com, Inc.",
+      "country": "US",
+      "isSynthetic": true,
+      "createdAt": "2026-10-24T10:00:00.000Z",
+      "updatedAt": "2026-10-29T12:00:00.000Z"
+    },
+    {
+      "id": "threat-ip-005",
+      "indicator": "203.0.113.19",
+      "type": "ip",
+      "category": "Suspicious Activity",
+      "severity": "LOW RISK",
+      "source": "SOC Sensor Telemetry (Demo)",
+      "description": "Low-volume unverified probe targeting SIP/VoIP ports. Potential automated internet-wide vulnerability census scan.",
+      "confidence": 45,
+      "asn": "AS4837 CHINA UNICOM Backbone",
+      "country": "CN",
+      "isSynthetic": true,
+      "createdAt": "2026-10-26T07:15:00.000Z",
+      "updatedAt": "2026-10-26T07:15:00.000Z"
+    },
+    {
+      "id": "threat-ip-006",
+      "indicator": "2001:db8:ffff:1::99",
+      "type": "ip",
+      "category": "Command and Control",
+      "severity": "HIGH RISK",
+      "source": "ThreatConnect Synthetic Feed",
+      "description": "Malicious IPv6 endpoint participating in covert DNS-over-HTTPS tunneling and encrypted payload exfiltration tests.",
+      "confidence": 88,
+      "asn": "AS6939 Hurricane Electric LLC",
+      "country": "US",
+      "isSynthetic": true,
+      "createdAt": "2026-10-27T15:20:00.000Z",
+      "updatedAt": "2026-10-29T17:30:00.000Z"
+    },
+    {
+      "id": "threat-domain-001",
+      "indicator": "secure-bank-login-update.com",
+      "type": "domain",
+      "category": "Phishing",
+      "severity": "HIGH RISK",
+      "source": "PhishTank Community Feed (Synthetic)",
+      "description": "Typosquatting credential harvesting portal mimicking multi-factor enterprise banking login. SSL cert issued via Let's Encrypt 48 hours ago.",
+      "confidence": 98,
+      "asn": "AS13335 Cloudflare, Inc.",
+      "country": "US",
+      "isSynthetic": true,
+      "createdAt": "2026-10-25T09:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "threat-domain-002",
+      "indicator": "payload-delivery-cdn.net",
+      "type": "domain",
+      "category": "Malware",
+      "severity": "HIGH RISK",
+      "source": "Mandiant Threat Intelligence (Synthetic)",
+      "description": "Distribution endpoint hosting Lumma Stealer trojan disguised as a PDF invoice. Multiple detections by static and dynamic heuristic engines.",
+      "confidence": 95,
+      "asn": "AS51167 Contabo GmbH",
+      "country": "DE",
+      "isSynthetic": true,
+      "createdAt": "2026-10-20T13:40:00.000Z",
+      "updatedAt": "2026-10-28T18:10:00.000Z"
+    },
+    {
+      "id": "threat-domain-003",
+      "indicator": "c2-command-beacon.org",
+      "type": "domain",
+      "category": "Command and Control",
+      "severity": "HIGH RISK",
+      "source": "CrowdStrike Falcon Intel (Synthetic)",
+      "description": "Fast-flux domain name resolution used as active fallback beacon for APT-style remote access trojan (RAT) communications.",
+      "confidence": 92,
+      "asn": "AS200019 Alexhost SRL",
+      "country": "MD",
+      "isSynthetic": true,
+      "createdAt": "2026-10-19T06:30:00.000Z",
+      "updatedAt": "2026-10-27T21:00:00.000Z"
+    },
+    {
+      "id": "threat-domain-004",
+      "indicator": "crypto-airdrop-claim.xyz",
+      "type": "domain",
+      "category": "Suspicious Activity",
+      "severity": "MEDIUM RISK",
+      "source": "Spamhaus DBL (Synthetic)",
+      "description": "Web3 wallet-drainer landing site utilizing malicious permit signatures to siphon digital assets. Distributed via spam email vectors.",
+      "confidence": 78,
+      "asn": "AS202685 Sarek Ltd",
+      "country": "SC",
+      "isSynthetic": true,
+      "createdAt": "2026-10-27T10:15:00.000Z",
+      "updatedAt": "2026-10-29T14:45:00.000Z"
+    },
+    {
+      "id": "threat-domain-005",
+      "indicator": "vpn-portal-auth-check.top",
+      "type": "domain",
+      "category": "Phishing",
+      "severity": "HIGH RISK",
+      "source": "Internal SOC Threat Hunting (Synthetic)",
+      "description": "Spoofed SSL-VPN gateway interface configured to capture Active Directory / LDAP corporate user credentials and OTP tokens.",
+      "confidence": 97,
+      "asn": "AS14061 DigitalOcean, LLC",
+      "country": "NL",
+      "isSynthetic": true,
+      "createdAt": "2026-10-28T04:20:00.000Z",
+      "updatedAt": "2026-10-29T23:10:00.000Z"
+    },
+    {
+      "id": "threat-domain-006",
+      "indicator": "tracking-metrics-analytics.online",
+      "type": "domain",
+      "category": "Suspicious Activity",
+      "severity": "LOW RISK",
+      "source": "DNS Threat Sensor (Synthetic)",
+      "description": "Recently registered domain exhibiting aggressive telemetry collection and fingerprinting behavior. No active exploit payloads identified yet.",
+      "confidence": 52,
+      "asn": "AS24940 Hetzner Online GmbH",
+      "country": "FI",
+      "isSynthetic": true,
+      "createdAt": "2026-10-29T08:00:00.000Z",
+      "updatedAt": "2026-10-29T08:00:00.000Z"
+    }
+  ],
+  "history": [
+    {
+      "indicator": "8.8.8.8",
+      "type": "ip",
+      "matchStatus": "No Match Found",
+      "category": "Unclassified / No Threat Record",
+      "severity": "UNKNOWN",
+      "source": "Multi-Source Feed Analysis (No match)",
+      "confidence": 0,
+      "evidence": "No malicious matches found in responding feeds, but one or more external threat feeds were unavailable. (Absence of threat records does not guarantee safety).",
+      "notes": "Investigated indicator (Feed Error / Incomplete Query)",
+      "analyst": "SOC Lead",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "8.8.8.8",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/8.8.8.8/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "8.8.8.8",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "AbuseIPDB authentication failed: Invalid or expired API key.",
+          "attributionUrl": "https://www.abuseipdb.com/check/8.8.8.8",
+          "queryTimeMs": 310
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "8.8.8.8",
+          "status": "clean_or_no_reports",
+          "isThreatFound": false,
+          "details": "No threat pulses or adversary campaigns linked to this indicator in AlienVault OTX.",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/8.8.8.8",
+          "queryTimeMs": 263,
+          "rawAttributes": {
+            "pulseCount": 0,
+            "reputation": 0,
+            "pulseNames": []
+          }
+        }
+      ],
+      "comparison": {
+        "localMatch": false,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 0,
+        "correlationVerdict": "Feed Error / Incomplete Query",
+        "summaryText": "No malicious matches found in responding feeds, but one or more external threat feeds were unavailable. (Absence of threat records does not guarantee safety)."
+      },
+      "id": "inv-1793349333284-twor",
+      "timestamp": "2026-10-30T08:35:33.284Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "confidence": 96,
+      "evidence": "[Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator (Multi-Source Correlated Threat)",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Lead",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/185.220.101.5/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "185.220.101.5",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "AbuseIPDB authentication failed: Invalid or expired API key.",
+          "attributionUrl": "https://www.abuseipdb.com/check/185.220.101.5",
+          "queryTimeMs": 298
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "185.220.101.5",
+          "status": "detected_threat",
+          "isThreatFound": true,
+          "details": "Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/185.220.101.5",
+          "queryTimeMs": 1667,
+          "rawAttributes": {
+            "pulseCount": 50,
+            "reputation": 0,
+            "pulseNames": [
+              "Honeypot Data – T-Pot - Sydney, Australia - September 2026",
+              "Anonymization_Network | Oct 30, 2026 | Part 1/4",
+              "IOC Records Provided by @NextRayAI"
+            ]
+          },
+          "confidence": 96,
+          "severity": "HIGH RISK",
+          "category": "Command and Control",
+          "lastReported": "2026-10-30T08:35:01.814000"
+        }
+      ],
+      "comparison": {
+        "localMatch": true,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 1,
+        "correlationVerdict": "Multi-Source Correlated Threat",
+        "summaryText": "Correlated Threat Confirmed: Detected simultaneously in local database and 1 live public intelligence feed(s) (AlienVault OTX)."
+      },
+      "id": "inv-1793349315843-iujy",
+      "timestamp": "2026-10-30T08:35:15.843Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "confidence": 96,
+      "evidence": "[Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator (Multi-Source Correlated Threat)",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Lead",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/185.220.101.5/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "185.220.101.5",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "AbuseIPDB authentication failed: Invalid or expired API key.",
+          "attributionUrl": "https://www.abuseipdb.com/check/185.220.101.5",
+          "queryTimeMs": 346
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "185.220.101.5",
+          "status": "detected_threat",
+          "isThreatFound": true,
+          "details": "Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/185.220.101.5",
+          "queryTimeMs": 1771,
+          "rawAttributes": {
+            "pulseCount": 50,
+            "reputation": 0,
+            "pulseNames": [
+              "Honeypot Data – T-Pot - Sydney, Australia - September 2026",
+              "Anonymization_Network | Oct 30, 2026 | Part 1/4",
+              "IOC Records Provided by @NextRayAI"
+            ]
+          },
+          "confidence": 96,
+          "severity": "HIGH RISK",
+          "category": "Command and Control",
+          "lastReported": "2026-10-30T08:35:01.814000"
+        }
+      ],
+      "comparison": {
+        "localMatch": true,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 1,
+        "correlationVerdict": "Multi-Source Correlated Threat",
+        "summaryText": "Correlated Threat Confirmed: Detected simultaneously in local database and 1 live public intelligence feed(s) (AlienVault OTX)."
+      },
+      "id": "inv-1793349309314-nh85",
+      "timestamp": "2026-10-30T08:35:09.314Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "confidence": 96,
+      "evidence": "[Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator (Multi-Source Correlated Threat)",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Lead",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/185.220.101.5/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "185.220.101.5",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "AbuseIPDB authentication failed: Invalid or expired API key.",
+          "attributionUrl": "https://www.abuseipdb.com/check/185.220.101.5",
+          "queryTimeMs": 316
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "185.220.101.5",
+          "status": "detected_threat",
+          "isThreatFound": true,
+          "details": "Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/185.220.101.5",
+          "queryTimeMs": 584,
+          "rawAttributes": {
+            "pulseCount": 50,
+            "reputation": 0,
+            "pulseNames": [
+              "Honeypot Data – T-Pot - Sydney, Australia - September 2026",
+              "Anonymization_Network | Oct 30, 2026 | Part 1/4",
+              "IOC Records Provided by @NextRayAI"
+            ]
+          },
+          "confidence": 96,
+          "severity": "HIGH RISK",
+          "category": "Command and Control",
+          "lastReported": "2026-10-30T07:33:13.507000"
+        }
+      ],
+      "comparison": {
+        "localMatch": true,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 1,
+        "correlationVerdict": "Multi-Source Correlated Threat",
+        "summaryText": "Correlated Threat Confirmed: Detected simultaneously in local database and 1 live public intelligence feed(s) (AlienVault OTX)."
+      },
+      "id": "inv-1793349296554-uis7",
+      "timestamp": "2026-10-30T08:34:56.554Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "confidence": 96,
+      "evidence": "[Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator (Multi-Source Correlated Threat)",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Lead",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/185.220.101.5/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "185.220.101.5",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "AbuseIPDB authentication failed: Invalid or expired API key.",
+          "attributionUrl": "https://www.abuseipdb.com/check/185.220.101.5",
+          "queryTimeMs": 331
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "185.220.101.5",
+          "status": "detected_threat",
+          "isThreatFound": true,
+          "details": "Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/185.220.101.5",
+          "queryTimeMs": 1207,
+          "rawAttributes": {
+            "pulseCount": 50,
+            "reputation": 0,
+            "pulseNames": [
+              "Honeypot Data – T-Pot - Sydney, Australia - September 2026",
+              "Anonymization_Network | Oct 30, 2026 | Part 1/4",
+              "IOC Records Provided by @NextRayAI"
+            ]
+          },
+          "confidence": 96,
+          "severity": "HIGH RISK",
+          "category": "Command and Control",
+          "lastReported": "2026-10-30T07:33:13.507000"
+        }
+      ],
+      "comparison": {
+        "localMatch": true,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 1,
+        "correlationVerdict": "Multi-Source Correlated Threat",
+        "summaryText": "Correlated Threat Confirmed: Detected simultaneously in local database and 1 live public intelligence feed(s) (AlienVault OTX)."
+      },
+      "id": "inv-1793349291289-f4ao",
+      "timestamp": "2026-10-30T08:34:51.289Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "confidence": 96,
+      "evidence": "[Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator (Multi-Source Correlated Threat)",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Analyst",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "URLhaus Auth-Key not configured in environment (URLHAUS_API_KEY). Set key in .env or settings to query live abuse.ch malware telemetry.",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/185.220.101.5/",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "185.220.101.5",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "AbuseIPDB API key not configured in environment (ABUSEIPDB_API_KEY). Set key in .env or Vercel settings to enable live IP reputation scoring.",
+          "attributionUrl": "https://www.abuseipdb.com/check/185.220.101.5",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "185.220.101.5",
+          "status": "detected_threat",
+          "isThreatFound": true,
+          "details": "Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/185.220.101.5",
+          "queryTimeMs": 697,
+          "rawAttributes": {
+            "pulseCount": 50,
+            "reputation": 0,
+            "pulseNames": [
+              "Honeypot Data – T-Pot - Sydney, Australia - September 2026",
+              "Anonymization_Network | Oct 30, 2026 | Part 1/4",
+              "IOC Records Provided by @NextRayAI"
+            ]
+          },
+          "confidence": 96,
+          "severity": "HIGH RISK",
+          "category": "Command and Control",
+          "lastReported": "2026-10-30T07:33:13.507000"
+        }
+      ],
+      "comparison": {
+        "localMatch": true,
+        "liveFeedsChecked": 1,
+        "liveFeedsReportingThreat": 1,
+        "correlationVerdict": "Multi-Source Correlated Threat",
+        "summaryText": "Correlated Threat Confirmed: Detected simultaneously in local database and 1 live public intelligence feed(s) (AlienVault OTX)."
+      },
+      "id": "inv-1793348599124-9qee",
+      "timestamp": "2026-10-30T08:23:19.124Z"
+    },
+    {
+      "indicator": "8.8.8.8",
+      "type": "ip",
+      "matchStatus": "No Match Found",
+      "category": "Unclassified / No Threat Record",
+      "severity": "UNKNOWN",
+      "source": "Multi-Source Feed Analysis (No match)",
+      "confidence": 0,
+      "evidence": "No malicious matches found in responding feeds, but one or more external threat feeds were unavailable. (Absence of threat records does not guarantee safety).",
+      "notes": "Investigated indicator (Feed Error / Incomplete Query)",
+      "analyst": "SOC Analyst",
+      "isSynthetic": false,
+      "liveFeeds": [
+        {
+          "id": "urlhaus",
+          "name": "URLhaus (abuse.ch)",
+          "indicator": "8.8.8.8",
+          "status": "unavailable",
+          "isThreatFound": false,
+          "details": "URLhaus API returned HTTP status 401 (Unauthorized).",
+          "attributionUrl": "https://urlhaus.abuse.ch/host/8.8.8.8/",
+          "queryTimeMs": 934
+        },
+        {
+          "id": "abuseipdb",
+          "name": "AbuseIPDB",
+          "indicator": "8.8.8.8",
+          "status": "not_configured",
+          "isThreatFound": false,
+          "details": "AbuseIPDB API key not configured in environment (ABUSEIPDB_API_KEY). Set key in .env or Vercel settings to enable live IP reputation scoring.",
+          "attributionUrl": "https://www.abuseipdb.com/check/8.8.8.8",
+          "queryTimeMs": 0
+        },
+        {
+          "id": "otx",
+          "name": "AlienVault OTX",
+          "indicator": "8.8.8.8",
+          "status": "clean_or_no_reports",
+          "isThreatFound": false,
+          "details": "No threat pulses or adversary campaigns linked to this indicator in AlienVault OTX.",
+          "attributionUrl": "https://otx.alienvault.com/indicator/ip/8.8.8.8",
+          "queryTimeMs": 294,
+          "rawAttributes": {
+            "pulseCount": 0,
+            "reputation": 0,
+            "pulseNames": []
+          }
+        }
+      ],
+      "comparison": {
+        "localMatch": false,
+        "liveFeedsChecked": 2,
+        "liveFeedsReportingThreat": 0,
+        "correlationVerdict": "Feed Error / Incomplete Query",
+        "summaryText": "No malicious matches found in responding feeds, but one or more external threat feeds were unavailable. (Absence of threat records does not guarantee safety)."
+      },
+      "id": "inv-1793348525209-syrm",
+      "timestamp": "2026-10-30T08:22:05.209Z"
+    },
+    {
+      "indicator": "8.8.8.8",
+      "type": "ip",
+      "matchStatus": "No Match Found",
+      "category": "Unclassified / No Threat Record",
+      "severity": "UNKNOWN",
+      "source": "Threat Intelligence Database",
+      "confidence": 0,
+      "evidence": "No matching threat intelligence records found in the database. IMPORTANT: The absence of a recorded threat does not guarantee that this indicator is safe or benign. Always verify with network telemetry, firewall logs, and behavioral sandbox execution.",
+      "notes": "Baseline threat lookup returned no matching entries.",
+      "analyst": "SOC Analyst",
+      "isSynthetic": false,
+      "id": "inv-1793346888642-2cwo",
+      "timestamp": "2026-10-30T07:54:48.642Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "CISA Automated Threat Intel (Synthetic)",
+      "confidence": 96,
+      "evidence": "Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Investigated indicator matched threat record: threat-ip-001",
+      "threatId": "threat-ip-001",
+      "analyst": "SOC Analyst",
+      "isSynthetic": true,
+      "id": "inv-1793346885585-r9pj",
+      "timestamp": "2026-10-30T07:54:45.585Z"
+    },
+    {
+      "id": "hist-demo-001",
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "matchStatus": "Known Indicator Match",
+      "category": "Ransomware",
+      "severity": "HIGH RISK",
+      "source": "CISA Automated Threat Intel (Synthetic)",
+      "confidence": 96,
+      "evidence": "LockBit 3.0 staging node observed in active outbound egress logs.",
+      "asn": "AS208294 Zwiebelfreunde e.V.",
+      "country": "DE",
+      "notes": "Correlated with host workstation isolation event #SOC-8924.",
+      "threatId": "threat-ip-001",
+      "timestamp": "2026-10-29T22:15:00.000Z",
+      "analyst": "SOC Senior Analyst (Demo)",
+      "isSynthetic": true
+    },
+    {
+      "id": "hist-demo-002",
+      "indicator": "secure-bank-login-update.com",
+      "type": "domain",
+      "matchStatus": "Known Indicator Match",
+      "category": "Phishing",
+      "severity": "HIGH RISK",
+      "source": "PhishTank Community Feed (Synthetic)",
+      "confidence": 98,
+      "evidence": "High confidence phishing domain targeting corporate banking portal.",
+      "asn": "AS13335 Cloudflare, Inc.",
+      "country": "US",
+      "notes": "Blocked at corporate DNS firewalls globally.",
+      "threatId": "threat-domain-001",
+      "timestamp": "2026-10-29T23:05:00.000Z",
+      "analyst": "SOC Senior Analyst (Demo)",
+      "isSynthetic": true
+    },
+    {
+      "id": "hist-demo-003",
+      "indicator": "8.8.8.8",
+      "type": "ip",
+      "matchStatus": "No Match Found",
+      "category": "Unknown",
+      "severity": "UNKNOWN",
+      "source": "Local Threat DB Query",
+      "confidence": 0,
+      "evidence": "No recorded threat intelligence found in local database. Note: absence of threat records does not guarantee the indicator is safe.",
+      "asn": "AS15169 Google LLC",
+      "country": "US",
+      "notes": "Legitimate public recursive DNS resolver tested for baseline calibration.",
+      "timestamp": "2026-10-29T23:30:00.000Z",
+      "analyst": "Tier-1 SOC Investigator",
+      "isSynthetic": false
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert-1793350202796-3ng1",
+      "indicator": "secure-bank-login-update.com",
+      "type": "domain",
+      "severity": "HIGH RISK",
+      "category": "Phishing",
+      "description": "Network log analysis detected known malicious indicator secure-bank-login-update.com [Phishing] with 2 observed interaction(s).",
+      "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Typosquatting credential harvesting portal mimicking multi-factor enterprise banking login. SSL cert issued via Let's Encrypt 48 hours ago.. Observed 2 time(s) in roles: referrer.",
+      "source": "Network Log Analysis (Local DB (PhishTank Community Feed (Synthetic)))",
+      "status": "Active",
+      "occurrenceCount": 1,
+      "createdAt": "2026-10-30T08:50:02.796Z",
+      "lastObservedAt": "2026-10-30T08:50:02.796Z"
+    },
+    {
+      "id": "alert-1793350191900-4wjp",
+      "indicator": "45.33.32.156",
+      "type": "ip",
+      "severity": "MEDIUM RISK",
+      "category": "Suspicious Activity",
+      "description": "Network log analysis detected known malicious indicator 45.33.32.156 [Suspicious Activity] with 1 observed interaction(s).",
+      "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.. Observed 1 time(s) in roles: source. | [Update]: [THREAT DETECTED IN LOG] [Local Intelligence]: Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.. Observed 1 time(s) in roles: source. Target port(s): 38291. Protocol(s): TCP.",
+      "source": "Network Log Analysis (Local DB (AbuseIPDB Demonstration Feed))",
+      "status": "Active",
+      "occurrenceCount": 2,
+      "createdAt": "2026-10-30T08:49:51.900Z",
+      "lastObservedAt": "2026-10-30T08:50:09.693Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "severity": "HIGH RISK",
+      "category": "Ransomware",
+      "description": "Threat detection (Multi-Source Correlated Threat): [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX th...",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "id": "alert-1793349296554-f9c2",
+      "status": "Resolved",
+      "createdAt": "2026-10-30T08:34:56.554Z",
+      "occurrenceCount": 3,
+      "lastObservedAt": "2026-10-30T08:35:15.842Z",
+      "evidence": "| [Update]: [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX threat intelligence pulses. Top pulses: \"Honeypot Data – T-Pot - Sydney, Australia - September 2026\", \"Anonymization_Network | Oct 30, 2026 | Part 1/4\".",
+      "reviewedAt": "2026-10-30T08:35:24.534Z",
+      "reviewedBy": "Incident Commander",
+      "resolutionNotes": "Egress firewall block applied. Host quarantined."
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "severity": "HIGH RISK",
+      "category": "Ransomware",
+      "description": "Threat detection (Multi-Source Correlated Threat): [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX th...",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "id": "alert-1793349291288-n94b",
+      "status": "Active",
+      "createdAt": "2026-10-30T08:34:51.288Z",
+      "occurrenceCount": 3,
+      "lastObservedAt": "2026-10-30T08:50:09.692Z",
+      "evidence": "| [Update]: [THREAT DETECTED IN LOG] [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.. Observed 3 time(s) in roles: source. Target port(s): 443. Protocol(s): TCP. | [Update]: [THREAT DETECTED IN LOG] [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.. Observed 1 time(s) in roles: destination. Target port(s): 443. Protocol(s): TCP."
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "severity": "HIGH RISK",
+      "category": "Ransomware",
+      "description": "Threat detection (Multi-Source Correlated Threat): [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic. [Live AlienVault OTX]: Indicator actively cataloged in 50 AlienVault OTX th...",
+      "source": "Local DB (CISA Automated Threat Intel (Synthetic)) · Live: AlienVault OTX",
+      "id": "alert-1793348599123-8gsr",
+      "status": "Active",
+      "createdAt": "2026-10-30T08:23:19.123Z"
+    },
+    {
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "severity": "HIGH RISK",
+      "category": "Ransomware",
+      "description": "Threat match detected: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.",
+      "source": "CISA Automated Threat Intel (Synthetic)",
+      "id": "alert-1793346885584-q6vg",
+      "status": "Active",
+      "createdAt": "2026-10-30T07:54:45.584Z"
+    },
+    {
+      "id": "alert-demo-001",
+      "indicator": "185.220.101.5",
+      "type": "ip",
+      "severity": "HIGH RISK",
+      "category": "Ransomware",
+      "description": "Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying.",
+      "source": "CISA Automated Threat Intel (Synthetic)",
+      "status": "Active",
+      "createdAt": "2026-10-29T22:15:00.000Z"
+    },
+    {
+      "id": "alert-demo-002",
+      "indicator": "secure-bank-login-update.com",
+      "type": "domain",
+      "severity": "HIGH RISK",
+      "category": "Phishing",
+      "description": "Typosquatting credential harvesting portal mimicking multi-factor enterprise banking login.",
+      "source": "PhishTank Community Feed (Synthetic)",
+      "status": "Active",
+      "createdAt": "2026-10-29T23:05:00.000Z"
+    },
+    {
+      "id": "alert-demo-003",
+      "indicator": "45.33.32.156",
+      "type": "ip",
+      "severity": "MEDIUM RISK",
+      "category": "Suspicious Activity",
+      "description": "Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.",
+      "source": "AbuseIPDB Demonstration Feed",
+      "status": "Acknowledged",
+      "createdAt": "2026-10-29T18:40:00.000Z",
+      "acknowledgedAt": "2026-10-29T19:10:00.000Z"
+    }
+  ],
+  "logAnalyses": [
+    {
+      "id": "log-1793350209694-g4hjt",
+      "fileName": "aws_vpc_flow_incident.log",
+      "fileSize": 1382,
+      "logFormat": "AWS VPC Flow Log",
+      "totalLines": 14,
+      "parsedEntriesCount": 14,
+      "totalExtracted": 20,
+      "uniqueIndicatorsCount": 15,
+      "threatMatchesCount": 2,
+      "unmatchedCount": 13,
+      "lookupFailuresCount": 0,
+      "highRiskCount": 1,
+      "mediumRiskCount": 1,
+      "lowRiskCount": 0,
+      "timestamp": "2026-10-30T08:50:09.694Z",
+      "analyst": "SOC Analyst",
+      "indicators": [
+        {
+          "indicator": "185.220.101.5",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            443
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "Known Indicator Match",
+          "severity": "HIGH RISK",
+          "category": "Ransomware",
+          "source": "Local DB (CISA Automated Threat Intel (Synthetic))",
+          "confidence": 96,
+          "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.. Observed 1 time(s) in roles: destination. Target port(s): 443. Protocol(s): TCP.",
+          "asn": "AS208294 Zwiebelfreunde e.V.",
+          "country": "DE",
+          "isSynthetic": true,
+          "alertCreated": false,
+          "alertId": "alert-1793349291288-n94b"
+        },
+        {
+          "indicator": "45.33.32.156",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "ports": [
+            38291
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "Known Indicator Match",
+          "severity": "MEDIUM RISK",
+          "category": "Suspicious Activity",
+          "source": "Local DB (AbuseIPDB Demonstration Feed)",
+          "confidence": 80,
+          "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.. Observed 1 time(s) in roles: source. Target port(s): 38291. Protocol(s): TCP.",
+          "asn": "AS63949 Linode, LLC",
+          "country": "US",
+          "isSynthetic": true,
+          "alertCreated": false,
+          "alertId": "alert-1793350191900-4wjp"
+        },
+        {
+          "indicator": "194.26.29.114",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            44102,
+            44103
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.1.15",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 2,
+          "ports": [
+            445
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.1.50",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            49182,
+            49190
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.1.10",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            53201,
+            53202
+          ],
+          "protocols": [
+            "UDP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.1.120",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            51290,
+            2049
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "193.142.146.35",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "ports": [
+            51922
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.2.80",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            3389
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "91.240.118.172",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            8080
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "8.8.8.8",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            53
+          ],
+          "protocols": [
+            "UDP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "1.1.1.1",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            53
+          ],
+          "protocols": [
+            "UDP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.3.20",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            22
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "142.250.190.46",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            443
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "10.0.2.100",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            2049
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        }
+      ],
+      "sampleLines": [
+        {
+          "lineNumber": 5,
+          "raw": "2 109283746192 eni-048a19283f 194.26.29.114 10.0.1.15 44102 445 6 12 584 1761748200 1761748260 REJECT OK",
+          "srcIp": "194.26.29.114",
+          "dstIp": "10.0.1.15",
+          "srcPort": 44102,
+          "dstPort": 445,
+          "protocol": "TCP",
+          "action": "REJECT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 6,
+          "raw": "2 109283746192 eni-048a19283f 194.26.29.114 10.0.1.15 44103 445 6 12 584 1761748261 1761748320 REJECT OK",
+          "srcIp": "194.26.29.114",
+          "dstIp": "10.0.1.15",
+          "srcPort": 44103,
+          "dstPort": 445,
+          "protocol": "TCP",
+          "action": "REJECT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 7,
+          "raw": "2 109283746192 eni-088f91283c 193.142.146.35 10.0.2.80 51922 3389 6 25 1204 1761748300 1761748360 REJECT OK",
+          "srcIp": "193.142.146.35",
+          "dstIp": "10.0.2.80",
+          "srcPort": 51922,
+          "dstPort": 3389,
+          "protocol": "TCP",
+          "action": "REJECT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 8,
+          "raw": "2 109283746192 eni-091c78192a 10.0.1.50 185.220.101.5 49182 443 6 450 198200 1761748350 1761748410 ACCEPT OK",
+          "srcIp": "10.0.1.50",
+          "dstIp": "185.220.101.5",
+          "srcPort": 49182,
+          "dstPort": 443,
+          "protocol": "TCP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 9,
+          "raw": "2 109283746192 eni-091c78192a 10.0.1.50 91.240.118.172 49190 8080 6 320 145000 1761748420 1761748480 ACCEPT OK",
+          "srcIp": "10.0.1.50",
+          "dstIp": "91.240.118.172",
+          "srcPort": 49190,
+          "dstPort": 8080,
+          "protocol": "TCP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 10,
+          "raw": "2 109283746192 eni-012b33918a 10.0.1.10 8.8.8.8 53201 53 17 2 168 1761748500 1761748560 ACCEPT OK",
+          "srcIp": "10.0.1.10",
+          "dstIp": "8.8.8.8",
+          "srcPort": 53201,
+          "dstPort": 53,
+          "protocol": "UDP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 11,
+          "raw": "2 109283746192 eni-012b33918a 10.0.1.10 1.1.1.1 53202 53 17 2 168 1761748505 1761748565 ACCEPT OK",
+          "srcIp": "10.0.1.10",
+          "dstIp": "1.1.1.1",
+          "srcPort": 53202,
+          "dstPort": 53,
+          "protocol": "UDP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 12,
+          "raw": "2 109283746192 eni-055a88291f 45.33.32.156 10.0.3.20 38291 22 6 8 416 1761748600 1761748660 REJECT OK",
+          "srcIp": "45.33.32.156",
+          "dstIp": "10.0.3.20",
+          "srcPort": 38291,
+          "dstPort": 22,
+          "protocol": "TCP",
+          "action": "REJECT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 13,
+          "raw": "2 109283746192 eni-099d44182b 10.0.1.120 142.250.190.46 51290 443 6 80 45200 1761748700 1761748760 ACCEPT OK",
+          "srcIp": "10.0.1.120",
+          "dstIp": "142.250.190.46",
+          "srcPort": 51290,
+          "dstPort": 443,
+          "protocol": "TCP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 14,
+          "raw": "2 109283746192 eni-099d44182b 10.0.1.120 10.0.2.100 2049 2049 6 1200 950000 1761748800 1761748860 ACCEPT OK",
+          "srcIp": "10.0.1.120",
+          "dstIp": "10.0.2.100",
+          "srcPort": 2049,
+          "dstPort": 2049,
+          "protocol": "TCP",
+          "action": "ACCEPT",
+          "extractedCount": 2
+        }
+      ]
+    },
+    {
+      "id": "log-1793350202797-xiodf",
+      "fileName": "secure_web_proxy_gateway.log",
+      "fileSize": 1962,
+      "logFormat": "Standard Syslog / Plaintext Network Log",
+      "totalLines": 14,
+      "parsedEntriesCount": 14,
+      "totalExtracted": 20,
+      "uniqueIndicatorsCount": 15,
+      "threatMatchesCount": 1,
+      "unmatchedCount": 14,
+      "lookupFailuresCount": 0,
+      "highRiskCount": 1,
+      "mediumRiskCount": 0,
+      "lowRiskCount": 0,
+      "timestamp": "2026-10-30T08:50:02.797Z",
+      "analyst": "SOC Analyst",
+      "indicators": [
+        {
+          "indicator": "secure-bank-login-update.com",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 2,
+          "firstSeen": "29/Oct/2026:09:14:22 +0000",
+          "lastSeen": "29/Oct/2026:09:14:25 +0000",
+          "matchStatus": "Known Indicator Match",
+          "severity": "HIGH RISK",
+          "category": "Phishing",
+          "source": "Local DB (PhishTank Community Feed (Synthetic))",
+          "confidence": 98,
+          "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Typosquatting credential harvesting portal mimicking multi-factor enterprise banking login. SSL cert issued via Let's Encrypt 48 hours ago.. Observed 2 time(s) in roles: referrer.",
+          "asn": "AS13335 Cloudflare, Inc.",
+          "country": "US",
+          "isSynthetic": true,
+          "alertCreated": true,
+          "alertId": "alert-1793350202796-3ng1"
+        },
+        {
+          "indicator": "192.168.10.45",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "firstSeen": "29/Oct/2026:09:14:22 +0000",
+          "lastSeen": "29/Oct/2026:09:14:25 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.88",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "firstSeen": "29/Oct/2026:09:20:10 +0000",
+          "lastSeen": "29/Oct/2026:09:45:18 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "global-shipping-track-update.com",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 2,
+          "firstSeen": "29/Oct/2026:09:20:10 +0000",
+          "lastSeen": "29/Oct/2026:09:45:18 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.14",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "firstSeen": "29/Oct/2026:09:32:15 +0000",
+          "lastSeen": "29/Oct/2026:09:33:02 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.12",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:25:01 +0000",
+          "lastSeen": "29/Oct/2026:09:25:01 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "api.github.com",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:25:01 +0000",
+          "lastSeen": "29/Oct/2026:09:25:01 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.99",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:28:44 +0000",
+          "lastSeen": "29/Oct/2026:09:28:44 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "portal-company-sso-verify.net",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:28:44 +0000",
+          "lastSeen": "29/Oct/2026:09:28:44 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "cdnjs.cloudflare.com",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:32:15 +0000",
+          "lastSeen": "29/Oct/2026:09:32:15 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "www.google.com",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:33:02 +0000",
+          "lastSeen": "29/Oct/2026:09:33:02 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.77",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:41:09 +0000",
+          "lastSeen": "29/Oct/2026:09:41:09 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "billing-portal-invoice-docs.org",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:41:09 +0000",
+          "lastSeen": "29/Oct/2026:09:41:09 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.10.50",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:50:33 +0000",
+          "lastSeen": "29/Oct/2026:09:50:33 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "cdn.jsdelivr.net",
+          "type": "domain",
+          "subType": "domain",
+          "roles": [
+            "referrer"
+          ],
+          "occurrences": 1,
+          "firstSeen": "29/Oct/2026:09:50:33 +0000",
+          "lastSeen": "29/Oct/2026:09:50:33 +0000",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (referrer) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        }
+      ],
+      "sampleLines": [
+        {
+          "lineNumber": 5,
+          "raw": "192.168.10.45 - - [29/Oct/2026:09:14:22 +0000] \"GET /login.html HTTP/1.1\" 200 4820 \"https://secure-bank-login-update.com/login?auth=session_8192\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\"",
+          "timestamp": "29/Oct/2026:09:14:22 +0000",
+          "srcIp": "192.168.10.45",
+          "domain": "secure-bank-login-update.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 6,
+          "raw": "192.168.10.45 - - [29/Oct/2026:09:14:25 +0000] \"POST /submit_creds.php HTTP/1.1\" 302 512 \"https://secure-bank-login-update.com/login\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\"",
+          "timestamp": "29/Oct/2026:09:14:25 +0000",
+          "srcIp": "192.168.10.45",
+          "domain": "secure-bank-login-update.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 7,
+          "raw": "192.168.10.88 - - [29/Oct/2026:09:20:10 +0000] \"GET /tracking/payload.exe HTTP/1.1\" 200 892010 \"https://global-shipping-track-update.com/delivery\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\"",
+          "timestamp": "29/Oct/2026:09:20:10 +0000",
+          "srcIp": "192.168.10.88",
+          "domain": "global-shipping-track-update.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 8,
+          "raw": "192.168.10.12 - - [29/Oct/2026:09:25:01 +0000] \"GET /api/v1/user HTTP/1.1\" 200 1204 \"https://api.github.com/users/octocat\" \"GitHub-Hookshot/1.0\"",
+          "timestamp": "29/Oct/2026:09:25:01 +0000",
+          "srcIp": "192.168.10.12",
+          "domain": "api.github.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 9,
+          "raw": "192.168.10.99 - - [29/Oct/2026:09:28:44 +0000] \"GET /auth/saml/login HTTP/1.1\" 200 6512 \"https://portal-company-sso-verify.net/sso/auth\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)\"",
+          "timestamp": "29/Oct/2026:09:28:44 +0000",
+          "srcIp": "192.168.10.99",
+          "domain": "portal-company-sso-verify.net",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 10,
+          "raw": "192.168.10.14 - - [29/Oct/2026:09:32:15 +0000] \"GET /jquery.min.js HTTP/1.1\" 304 0 \"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0\" \"Mozilla/5.0\"",
+          "timestamp": "29/Oct/2026:09:32:15 +0000",
+          "srcIp": "192.168.10.14",
+          "domain": "cdnjs.cloudflare.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 11,
+          "raw": "192.168.10.14 - - [29/Oct/2026:09:33:02 +0000] \"GET /search?q=cybersecurity+threats HTTP/1.1\" 200 32410 \"https://www.google.com/search\" \"Mozilla/5.0\"",
+          "timestamp": "29/Oct/2026:09:33:02 +0000",
+          "srcIp": "192.168.10.14",
+          "domain": "www.google.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 12,
+          "raw": "192.168.10.77 - - [29/Oct/2026:09:41:09 +0000] \"GET /invoices/view HTTP/1.1\" 200 3829 \"https://billing-portal-invoice-docs.org/download\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\"",
+          "timestamp": "29/Oct/2026:09:41:09 +0000",
+          "srcIp": "192.168.10.77",
+          "domain": "billing-portal-invoice-docs.org",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 13,
+          "raw": "192.168.10.88 - - [29/Oct/2026:09:45:18 +0000] \"POST /c2/checkin HTTP/1.1\" 404 128 \"https://global-shipping-track-update.com/gate.php\" \"WinHTTP-Agent/1.0\"",
+          "timestamp": "29/Oct/2026:09:45:18 +0000",
+          "srcIp": "192.168.10.88",
+          "domain": "global-shipping-track-update.com",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 14,
+          "raw": "192.168.10.50 - - [29/Oct/2026:09:50:33 +0000] \"GET /cdn/bootstrap.css HTTP/1.1\" 200 19280 \"https://cdn.jsdelivr.net/npm/bootstrap\" \"Mozilla/5.0\"",
+          "timestamp": "29/Oct/2026:09:50:33 +0000",
+          "srcIp": "192.168.10.50",
+          "domain": "cdn.jsdelivr.net",
+          "extractedCount": 2
+        }
+      ]
+    },
+    {
+      "id": "log-1793350191900-1cdad",
+      "fileName": "perimeter_firewall_incident.log",
+      "fileSize": 2351,
+      "logFormat": "Cisco ASA / Firepower Firewall",
+      "totalLines": 17,
+      "parsedEntriesCount": 17,
+      "totalExtracted": 24,
+      "uniqueIndicatorsCount": 14,
+      "threatMatchesCount": 2,
+      "unmatchedCount": 12,
+      "lookupFailuresCount": 0,
+      "highRiskCount": 1,
+      "mediumRiskCount": 1,
+      "lowRiskCount": 0,
+      "timestamp": "2026-10-30T08:49:51.901Z",
+      "analyst": "SOC Analyst",
+      "indicators": [
+        {
+          "indicator": "185.220.101.5",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 3,
+          "ports": [
+            443
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:22:01.104Z",
+          "lastSeen": "2026-10-29T14:22:15.652Z",
+          "matchStatus": "Known Indicator Match",
+          "severity": "HIGH RISK",
+          "category": "Ransomware",
+          "source": "Local DB (CISA Automated Threat Intel (Synthetic))",
+          "confidence": 96,
+          "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Known Tor exit node actively utilized for LockBit 3.0 ransomware staging and telemetry proxying. High frequency of malicious outbound traffic.. Observed 3 time(s) in roles: source. Target port(s): 443. Protocol(s): TCP.",
+          "asn": "AS208294 Zwiebelfreunde e.V.",
+          "country": "DE",
+          "isSynthetic": true,
+          "alertCreated": false,
+          "alertId": "alert-1793349291288-n94b"
+        },
+        {
+          "indicator": "45.33.32.156",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:24:10.890Z",
+          "lastSeen": "2026-10-29T14:24:10.890Z",
+          "matchStatus": "Known Indicator Match",
+          "severity": "MEDIUM RISK",
+          "category": "Suspicious Activity",
+          "source": "Local DB (AbuseIPDB Demonstration Feed)",
+          "confidence": 80,
+          "evidence": "[THREAT DETECTED IN LOG] [Local Intelligence]: Repeated unauthorized SSH/RDP port scanning and dictionary attacks observed across SOC external perimeter sensors.. Observed 1 time(s) in roles: source.",
+          "asn": "AS63949 Linode, LLC",
+          "country": "US",
+          "isSynthetic": true,
+          "alertCreated": true,
+          "alertId": "alert-1793350191900-4wjp"
+        },
+        {
+          "indicator": "192.168.1.105",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 5,
+          "ports": [
+            52412,
+            52414,
+            52440
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:22:01.104Z",
+          "lastSeen": "2026-10-29T14:30:00.000Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 5 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.1.2",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 3,
+          "ports": [
+            61201,
+            61205
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:25:02.115Z",
+          "lastSeen": "2026-10-29T14:26:45.330Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 3 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "91.240.118.172",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            8080
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:23:40.012Z",
+          "lastSeen": "2026-10-29T14:30:00.000Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "8.8.8.8",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 2,
+          "ports": [
+            53
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:25:02.115Z",
+          "lastSeen": "2026-10-29T14:25:02.210Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 2 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.1.1",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:24:10.890Z",
+          "lastSeen": "2026-10-29T14:24:10.890Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "1.1.1.1",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "ports": [
+            53
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:26:45.330Z",
+          "lastSeen": "2026-10-29T14:26:45.330Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "194.26.29.114",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:27:11.782Z",
+          "lastSeen": "2026-10-29T14:27:11.782Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.1.20",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:27:11.782Z",
+          "lastSeen": "2026-10-29T14:27:11.782Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "142.250.190.46",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "ports": [
+            443
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:28:05.412Z",
+          "lastSeen": "2026-10-29T14:28:05.412Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.1.120",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "ports": [
+            49180
+          ],
+          "protocols": [
+            "TCP"
+          ],
+          "firstSeen": "2026-10-29T14:28:05.412Z",
+          "lastSeen": "2026-10-29T14:28:05.412Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "193.142.146.35",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "source"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:29:19.901Z",
+          "lastSeen": "2026-10-29T14:29:19.901Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (source) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        },
+        {
+          "indicator": "192.168.1.15",
+          "type": "ip",
+          "subType": "ipv4",
+          "roles": [
+            "destination"
+          ],
+          "occurrences": 1,
+          "firstSeen": "2026-10-29T14:29:19.901Z",
+          "lastSeen": "2026-10-29T14:29:19.901Z",
+          "matchStatus": "No Match Found",
+          "severity": "UNKNOWN",
+          "category": "Uncorrelated Traffic",
+          "source": "Network Log Extraction (Zero-Trust Evaluation)",
+          "confidence": 0,
+          "evidence": "Extracted from log in role (destination) across 1 event(s). No corresponding threat intelligence signatures found in local repository or external threat feeds. ZERO-TRUST NOTE: Unmatched indicators are classified as UNKNOWN risk and are not confirmed clean."
+        }
+      ],
+      "sampleLines": [
+        {
+          "lineNumber": 6,
+          "raw": "2026-10-29T14:22:01.104Z %ASA-6-302013: Built outbound TCP connection 849201 for outside:185.220.101.5/443 (185.220.101.5/443) to inside:192.168.1.105/52412 (192.168.1.105/52412)",
+          "timestamp": "2026-10-29T14:22:01.104Z",
+          "srcIp": "185.220.101.5",
+          "dstIp": "192.168.1.105",
+          "srcPort": 443,
+          "dstPort": 52412,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 7,
+          "raw": "2026-10-29T14:22:04.281Z %ASA-6-302013: Built outbound TCP connection 849202 for outside:185.220.101.5/443 (185.220.101.5/443) to inside:192.168.1.105/52414 (192.168.1.105/52414)",
+          "timestamp": "2026-10-29T14:22:04.281Z",
+          "srcIp": "185.220.101.5",
+          "dstIp": "192.168.1.105",
+          "srcPort": 443,
+          "dstPort": 52414,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 8,
+          "raw": "2026-10-29T14:22:15.652Z %ASA-6-302014: Teardown TCP connection 849201 for outside:185.220.101.5/443 to inside:192.168.1.105/52412 duration 0:00:14 bytes 14820 TCP FINs",
+          "timestamp": "2026-10-29T14:22:15.652Z",
+          "srcIp": "185.220.101.5",
+          "dstIp": "192.168.1.105",
+          "srcPort": 443,
+          "dstPort": 52412,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 9,
+          "raw": "2026-10-29T14:23:40.012Z %ASA-6-302013: Built outbound TCP connection 849310 for outside:91.240.118.172/8080 (91.240.118.172/8080) to inside:192.168.1.105/52440 (192.168.1.105/52440)",
+          "timestamp": "2026-10-29T14:23:40.012Z",
+          "srcIp": "91.240.118.172",
+          "dstIp": "192.168.1.105",
+          "srcPort": 8080,
+          "dstPort": 52440,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 10,
+          "raw": "2026-10-29T14:24:10.890Z %ASA-4-106023: Deny tcp src outside:45.33.32.156/44122 dst inside:192.168.1.1/22 by access-group \"OUTSIDE_IN\" [0x8201a412, 0x0]",
+          "timestamp": "2026-10-29T14:24:10.890Z",
+          "srcIp": "45.33.32.156",
+          "dstIp": "192.168.1.1",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 11,
+          "raw": "2026-10-29T14:25:02.115Z %ASA-6-302015: Built outbound UDP connection 849401 for outside:8.8.8.8/53 (8.8.8.8/53) to inside:192.168.1.2/61201 (192.168.1.2/61201)",
+          "timestamp": "2026-10-29T14:25:02.115Z",
+          "srcIp": "8.8.8.8",
+          "dstIp": "192.168.1.2",
+          "srcPort": 53,
+          "dstPort": 61201,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 12,
+          "raw": "2026-10-29T14:25:02.210Z %ASA-6-302016: Teardown UDP connection 849401 for outside:8.8.8.8/53 to inside:192.168.1.2/61201 duration 0:00:01 bytes 184",
+          "timestamp": "2026-10-29T14:25:02.210Z",
+          "srcIp": "8.8.8.8",
+          "dstIp": "192.168.1.2",
+          "srcPort": 53,
+          "dstPort": 61201,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 13,
+          "raw": "2026-10-29T14:26:45.330Z %ASA-6-302015: Built outbound UDP connection 849455 for outside:1.1.1.1/53 (1.1.1.1/53) to inside:192.168.1.2/61205 (192.168.1.2/61205)",
+          "timestamp": "2026-10-29T14:26:45.330Z",
+          "srcIp": "1.1.1.1",
+          "dstIp": "192.168.1.2",
+          "srcPort": 53,
+          "dstPort": 61205,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 14,
+          "raw": "2026-10-29T14:27:11.782Z %ASA-4-106023: Deny tcp src outside:194.26.29.114/58120 dst inside:192.168.1.20/445 by access-group \"OUTSIDE_IN\" [0x8201a412, 0x0]",
+          "timestamp": "2026-10-29T14:27:11.782Z",
+          "srcIp": "194.26.29.114",
+          "dstIp": "192.168.1.20",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 15,
+          "raw": "2026-10-29T14:28:05.412Z %ASA-6-302013: Built outbound TCP connection 849502 for outside:142.250.190.46/443 (142.250.190.46/443) to inside:192.168.1.120/49180 (192.168.1.120/49180)",
+          "timestamp": "2026-10-29T14:28:05.412Z",
+          "srcIp": "142.250.190.46",
+          "dstIp": "192.168.1.120",
+          "srcPort": 443,
+          "dstPort": 49180,
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 16,
+          "raw": "2026-10-29T14:29:19.901Z %ASA-4-106023: Deny tcp src outside:193.142.146.35/3389 dst inside:192.168.1.15/3389 by access-group \"OUTSIDE_IN\" [0x8201a412, 0x0]",
+          "timestamp": "2026-10-29T14:29:19.901Z",
+          "srcIp": "193.142.146.35",
+          "dstIp": "192.168.1.15",
+          "extractedCount": 2
+        },
+        {
+          "lineNumber": 17,
+          "raw": "2026-10-29T14:30:00.000Z %ASA-6-302014: Teardown TCP connection 849310 for outside:91.240.118.172/8080 to inside:192.168.1.105/52440 duration 0:06:20 bytes 2490100 TCP FINs",
+          "timestamp": "2026-10-29T14:30:00.000Z",
+          "srcIp": "91.240.118.172",
+          "dstIp": "192.168.1.105",
+          "srcPort": 8080,
+          "dstPort": 52440,
+          "extractedCount": 2
+        }
+      ]
+    }
+  ]
+}

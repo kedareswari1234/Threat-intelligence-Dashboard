@@ -1,0 +1,6 @@
+{
+  "name": "Threat Intelligence Dashboard",
+  "description": "SOC-grade cybersecurity dashboard for malicious IP address and domain analysis, threat classification, alert generation, and forensic investigation reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
