@@ -12,7 +12,11 @@ export type SeverityLevel = 'HIGH RISK' | 'MEDIUM RISK' | 'LOW RISK' | 'UNKNOWN'
 
 export type AlertStatus = 'Active' | 'Reviewed' | 'Resolved';
 
-export type MatchStatus = 'Known Indicator Match' | 'No Match Found' | 'Lookup Failed';
+export type MatchStatus =
+  | 'Known Indicator Match'
+  | 'No Match Found'
+  | 'Lookup Failed'
+  | 'Insufficient Evidence';
 
 export interface ThreatIndicator {
   id: string;
@@ -30,17 +34,37 @@ export interface ThreatIndicator {
   updatedAt: string;
 }
 
+export type FeedErrorCode =
+  | 'API_KEY_MISSING'
+  | 'AUTH_ERROR'
+  | 'RATE_LIMITED'
+  | 'TIMEOUT'
+  | 'SERVICE_UNAVAILABLE'
+  | 'MALFORMED_RESPONSE'
+  | 'DNS_RESOLUTION_FAILED'
+  | 'UNSUPPORTED_INDICATOR'
+  | 'NETWORK_ERROR';
+
 export interface LiveFeedSource {
   id: 'urlhaus' | 'abuseipdb' | 'otx';
   name: string;
   indicator: string;
-  status: 'available' | 'detected_threat' | 'clean_or_no_reports' | 'unavailable' | 'not_configured';
+  status:
+    | 'available'
+    | 'detected_threat'
+    | 'clean_or_no_reports'
+    | 'unavailable'
+    | 'not_configured'
+    | 'insufficient_evidence';
   isThreatFound: boolean;
   confidence?: number;
   category?: string;
   severity?: SeverityLevel;
   lastReported?: string;
   details: string;
+  errorCode?: FeedErrorCode;
+  resolvedIp?: string;
+  reputationSummary?: string;
   rawAttributes?: Record<string, any>;
   queryTimeMs?: number;
   attributionUrl?: string;
@@ -55,7 +79,8 @@ export interface ComparisonSummary {
     | 'Live Intelligence Detected Match'
     | 'Local Threat Record Match'
     | 'No Match Across Sources'
-    | 'Feed Error / Incomplete Query';
+    | 'Feed Error / Incomplete Query'
+    | 'Insufficient Evidence / Partial Lookup';
   summaryText: string;
 }
 
@@ -102,6 +127,7 @@ export interface AnalysisResult {
   indicator: string;
   type: IndicatorType;
   isValid: boolean;
+  validationStatus?: string;
   validationError?: string;
   matchStatus: MatchStatus;
   threatRecord?: ThreatIndicator;
@@ -110,6 +136,8 @@ export interface AnalysisResult {
   evidence: string;
   source: string;
   confidence: number;
+  reputationInfo?: string;
+  resolvedIps?: string[];
   alertCreated: boolean;
   alertId?: string;
   isDuplicateAlertSuppressed?: boolean;
@@ -121,6 +149,16 @@ export interface AnalysisResult {
   isSynthetic: boolean;
   liveFeeds?: LiveFeedSource[];
   comparison?: ComparisonSummary;
+  databaseStatus?: {
+    provider: string;
+    connected: boolean;
+    localMatchChecked: boolean;
+    error?: string;
+  };
+  diagnostics?: {
+    liveFeedsEnabled: boolean;
+    warnings: string[];
+  };
 }
 
 export interface DashboardStats {

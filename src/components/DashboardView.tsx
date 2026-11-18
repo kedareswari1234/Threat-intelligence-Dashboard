@@ -29,7 +29,7 @@ interface DashboardViewProps {
   recentHistory: InvestigationRecord[];
   activeAlerts: SecurityAlert[];
   onNavigateTab: (tab: NavTab) => void;
-  onRunAnalysis: (indicator: string, type: IndicatorType) => void;
+  onRunAnalysis: (indicator: string, type: IndicatorType) => Promise<AnalysisResult> | void;
   isAnalyzing: boolean;
   latestResult: AnalysisResult | null;
 }
@@ -58,23 +58,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     { label: 'Bank Phishing (High Risk)', val: 'secure-bank-login-update.com' },
     { label: 'Lumma Malware CDN (High Risk)', val: 'payload-delivery-cdn.net' },
     { label: 'C2 Beacon (High Risk)', val: 'c2-command-beacon.org' },
-    { label: 'Safe Domain (Unmatched)', val: 'github.com' }
+    { label: 'Public Domain (Unmatched)', val: 'google.com' }
   ];
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const executeQuickAnalysis = async (val: string) => {
+    setInputError('');
+    try {
+      await onRunAnalysis(val, searchTab);
+    } catch (err: any) {
+      setInputError(err?.message || 'Unable to complete indicator analysis.');
+    }
+  };
+
+  const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) {
       setInputError('Please enter an IP address or domain name to analyze.');
       return;
     }
-    setInputError('');
-    onRunAnalysis(inputValue.trim(), searchTab);
+    await executeQuickAnalysis(inputValue.trim());
   };
 
-  const handleChipClick = (val: string) => {
+  const handleChipClick = async (val: string) => {
     setInputValue(val);
-    setInputError('');
-    onRunAnalysis(val, searchTab);
+    await executeQuickAnalysis(val);
   };
 
   // Severity color utility
@@ -304,7 +311,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
               <div>
                 <span className="text-slate-400 block text-[11px]">Match Status:</span>
-                <span className="font-semibold text-slate-200">{latestResult.matchStatus}</span>
+                <span className={`font-semibold ${
+                  latestResult.matchStatus === 'Known Indicator Match'
+                    ? 'text-rose-400'
+                    : latestResult.matchStatus === 'Lookup Failed' || latestResult.matchStatus === 'Insufficient Evidence'
+                    ? 'text-amber-300'
+                    : 'text-slate-200'
+                }`}>
+                  {latestResult.matchStatus.toUpperCase()}
+                </span>
               </div>
               <div>
                 <span className="text-slate-400 block text-[11px]">Threat Category:</span>

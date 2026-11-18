@@ -10,17 +10,23 @@ export function sanitizeIndicator(rawInput: string): string {
   // Strip protocol (http://, https://, ftp://, etc.)
   sanitized = sanitized.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '');
 
-  // Strip port if present (for domain:port or ipv4:port, but not IPv6 brackets yet)
-  if (!sanitized.startsWith('[') && sanitized.includes(':') && !sanitized.includes('::')) {
-    // If it only has one colon, it might be domain:port or ip:port
+  // Strip path, query params, hash first so domain:port/path isolates domain:port
+  sanitized = sanitized.split('/')[0].split('?')[0].split('#')[0];
+
+  // Strip userinfo if present (e.g. user@domain.com)
+  if (sanitized.includes('@')) {
+    sanitized = sanitized.split('@').pop() || sanitized;
+  }
+
+  // Strip port if present (for domain:port or ipv4:port, or [ipv6]:port)
+  if (sanitized.startsWith('[') && sanitized.includes(']:')) {
+    sanitized = sanitized.slice(1, sanitized.indexOf(']:'));
+  } else if (!sanitized.startsWith('[') && sanitized.includes(':') && !sanitized.includes('::')) {
     const parts = sanitized.split(':');
     if (parts.length === 2 && /^\d+$/.test(parts[1])) {
       sanitized = parts[0];
     }
   }
-
-  // Strip path, query params, hash
-  sanitized = sanitized.split('/')[0].split('?')[0].split('#')[0];
 
   // Remove IPv6 brackets if present e.g. [2001:db8::1]
   if (sanitized.startsWith('[') && sanitized.endsWith(']')) {
@@ -151,8 +157,8 @@ export function validateDomain(domain: string): { isValid: boolean; error?: stri
 
   const tld = labels[labels.length - 1];
 
-  // TLD validation: at least 2 chars, alpha or punycode xn--
-  if (!/^(xn--)?[a-zA-Z]{2,}$/.test(tld)) {
+  // TLD validation: at least 2 chars alpha, or valid punycode xn--...
+  if (!/^(xn--[a-zA-Z0-9]{2,}|[a-zA-Z]{2,})$/.test(tld)) {
     return { isValid: false, error: `Invalid Top-Level Domain ".${tld}". TLD must contain at least 2 alphabetic characters.` };
   }
 

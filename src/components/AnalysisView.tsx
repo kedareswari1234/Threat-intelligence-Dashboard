@@ -7,7 +7,6 @@ import {
   Download,
   Info,
   ShieldAlert,
-  Server,
   FileText,
   HelpCircle,
   Network,
@@ -17,10 +16,10 @@ import {
   Activity,
   Check,
   XCircle,
-  Clock,
-  BellRing
+  BellRing,
+  Database
 } from 'lucide-react';
-import { IndicatorType, AnalysisResult, LiveFeedSource } from '../types/threat';
+import { IndicatorType, AnalysisResult, LiveFeedSource, MatchStatus } from '../types/threat';
 import { validateIndicator } from '../lib/validation';
 import { downloadInvestigationPDF } from '../lib/pdfReport';
 
@@ -48,11 +47,15 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
   const [enableLiveFeeds, setEnableLiveFeeds] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [validationSuccessInfo, setValidationSuccessInfo] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(latestResult);
 
   useEffect(() => {
     setActiveType(initialType);
+    setValidationError(null);
+    setAnalysisError(null);
+    setValidationSuccessInfo(null);
   }, [initialType]);
 
   useEffect(() => {
@@ -65,6 +68,8 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setInputVal(text);
+    setAnalysisError(null);
+
     if (!text.trim()) {
       setValidationError(null);
       setValidationSuccessInfo(null);
@@ -87,8 +92,14 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAnalysisError(null);
+
     if (!inputVal.trim()) {
-      setValidationError('Please enter an indicator value to investigate.');
+      setValidationError(
+        activeType === 'domain'
+          ? 'Please enter a domain name (e.g. google.com) to investigate.'
+          : 'Please enter an IP address to investigate.'
+      );
       return;
     }
 
@@ -102,7 +113,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
     setValidationError(null);
     try {
       const res = await onAnalyze(
-        inputVal.trim(),
+        preCheck.sanitized || inputVal.trim(),
         activeType,
         analystNotes,
         analystName,
@@ -110,7 +121,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
       );
       setResult(res);
     } catch (err: any) {
-      setValidationError(err.message || 'Analysis operation failed.');
+      setAnalysisError(err?.message || 'Unable to complete threat intelligence analysis.');
     } finally {
       setIsLoading(false);
     }
@@ -120,11 +131,18 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
     setActiveType(type);
     setInputVal(sampleIndicator);
     setValidationError(null);
+    setAnalysisError(null);
+    const check = validateIndicator(sampleIndicator, type);
+    if (check.isValid) {
+      let details = `Valid ${check.subType?.toUpperCase()}`;
+      if (check.details?.tld) details += ` · TLD: .${check.details.tld}`;
+      setValidationSuccessInfo(details);
+    }
     if (notes) setAnalystNotes(notes);
     setIsLoading(true);
     onAnalyze(sampleIndicator, type, notes || 'Demonstration sample investigation run', analystName, !enableLiveFeeds)
       .then((res) => setResult(res))
-      .catch((err) => setValidationError(err.message))
+      .catch((err) => setAnalysisError(err?.message || 'Unable to complete threat intelligence analysis.'))
       .finally(() => setIsLoading(false));
   };
 
@@ -138,6 +156,40 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
         return 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30';
       default:
         return 'text-slate-400 bg-slate-800/40 border-slate-700/50';
+    }
+  };
+
+  const formatMatchStatusDisplay = (status: MatchStatus) => {
+    switch (status) {
+      case 'Known Indicator Match':
+        return {
+          label: 'KNOWN INDICATOR MATCH',
+          sub: 'Confirmed by threat intelligence database or live feeds',
+          colorClass: 'text-rose-400',
+          icon: <ShieldAlert className="w-4 h-4 shrink-0" />
+        };
+      case 'Lookup Failed':
+        return {
+          label: 'LOOKUP FAILED',
+          sub: 'External provider lookups failed — indicator NOT verified safe',
+          colorClass: 'text-amber-400',
+          icon: <XCircle className="w-4 h-4 shrink-0" />
+        };
+      case 'Insufficient Evidence':
+        return {
+          label: 'INSUFFICIENT EVIDENCE',
+          sub: 'Partial provider coverage or skipped live feeds — monitor under Zero-Trust',
+          colorClass: 'text-amber-300',
+          icon: <AlertTriangle className="w-4 h-4 shrink-0" />
+        };
+      case 'No Match Found':
+      default:
+        return {
+          label: 'NO MATCH FOUND',
+          sub: 'No threat record found across queried sources (Zero-Trust: not assumed safe)',
+          colorClass: 'text-slate-300',
+          icon: <Info className="w-4 h-4 shrink-0" />
+        };
     }
   };
 
@@ -159,8 +211,15 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
         );
       case 'not_configured':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 bg-slate-800/60 border border-slate-700/50">
-            Key Not Configured
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono text-slate-300 bg-slate-800/80 border border-slate-700/60">
+            API Key Missing
+          </span>
+        );
+      case 'insufficient_evidence':
+        return (
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono text-amber-300 bg-amber-500/10 border border-amber-500/30 flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3 text-amber-400" />
+            Insufficient Evidence
           </span>
         );
       case 'unavailable':
@@ -173,6 +232,8 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
         );
     }
   };
+
+  const matchDisplay = result ? formatMatchStatusDisplay(result.matchStatus) : null;
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -199,9 +260,11 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
           {/* Mode Switcher */}
           <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800 shrink-0 self-start sm:self-auto">
             <button
+              type="button"
               onClick={() => {
                 setActiveType('ip');
                 setValidationError(null);
+                setAnalysisError(null);
                 setValidationSuccessInfo(null);
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
@@ -214,9 +277,11 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
               <span>IP Address Lookup</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 setActiveType('domain');
                 setValidationError(null);
+                setAnalysisError(null);
                 setValidationSuccessInfo(null);
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
@@ -265,9 +330,9 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
                 placeholder={
                   activeType === 'ip'
                     ? 'e.g. 185.220.101.5 or 2001:db8:ffff:1::99'
-                    : 'e.g. secure-bank-login-update.com or payload-delivery-cdn.net'
+                    : 'e.g. google.com, example.com, or secure-bank-login-update.com'
                 }
-                className="w-full pl-10 pr-28 py-3 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-hidden focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/40 font-mono"
+                className="w-full pl-10 pr-36 py-3 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-hidden focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/40 font-mono"
               />
               <div className="absolute inset-y-1.5 right-1.5 flex items-center">
                 <button
@@ -287,14 +352,26 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
               </div>
             </div>
 
-            {/* Validation Feedback Status */}
+            {/* Client Format Validation Feedback */}
             {validationError && (
               <div className="mt-2 p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
                 <span><strong>Validation Error:</strong> {validationError}</span>
               </div>
             )}
-            {!validationError && validationSuccessInfo && (
+
+            {/* Backend / API / Network Analysis Error Feedback (distinct from client format validation) */}
+            {analysisError && (
+              <div className="mt-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-2">
+                <XCircle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+                <div>
+                  <span className="font-semibold text-amber-300">Analysis Error: </span>
+                  <span>{analysisError}</span>
+                </div>
+              </div>
+            )}
+
+            {!validationError && !analysisError && validationSuccessInfo && (
               <div className="mt-2 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
                 <span><strong>Format Valid:</strong> {validationSuccessInfo}</span>
@@ -341,56 +418,77 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
           </div>
           <div className="flex flex-wrap gap-2 text-xs">
             <button
+              type="button"
               onClick={() => runSample('185.220.101.5', 'ip', 'Testing known LockBit Tor exit node')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-rose-500/30 hover:border-rose-400 text-rose-300 text-[11px] font-mono transition-colors"
             >
               1. LockBit C2 (Synthetic Demo Match)
             </button>
             <button
+              type="button"
               onClick={() => runSample('2001:db8:ffff:1::99', 'ip', 'Testing IPv6 C2 beacon node')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-rose-500/30 hover:border-rose-400 text-rose-300 text-[11px] font-mono transition-colors"
             >
               2. IPv6 Exfiltration C2 (High Risk)
             </button>
             <button
+              type="button"
               onClick={() => runSample('secure-bank-login-update.com', 'domain', 'Testing banking credential harvester')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-rose-500/30 hover:border-rose-400 text-rose-300 text-[11px] font-mono transition-colors"
             >
               3. Banking Harvester (Phishing)
             </button>
             <button
+              type="button"
               onClick={() => runSample('45.33.32.156', 'ip', 'Testing SSH honeypot scanner')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-mono transition-colors"
             >
               4. Scanner (Medium Risk)
             </button>
             <button
-              onClick={() => runSample('1.1.1.1', 'ip', 'Testing Cloudflare public resolver on live feeds')}
+              type="button"
+              onClick={() => runSample('google.com', 'domain', 'Testing public domain lookup & DNS IP resolution')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 text-[11px] font-mono transition-colors"
             >
-              5. Clean Public IP (Live Feed Check)
+              5. google.com (Live Domain Check)
             </button>
             <button
+              type="button"
+              onClick={() => runSample('example.com', 'domain', 'Testing RFC 2606 example.com domain')}
+              className="px-2.5 py-1 rounded bg-slate-950 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 text-[11px] font-mono transition-colors"
+            >
+              6. example.com (Public Domain)
+            </button>
+            <button
+              type="button"
               onClick={() => runSample('8.8.8.8', 'ip', 'Testing Google DNS resolver')}
               className="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 hover:border-slate-500 text-slate-300 text-[11px] font-mono transition-colors"
             >
-              6. Unmatched (Zero-Trust Unknown)
+              7. 8.8.8.8 (Zero-Trust Unknown)
             </button>
           </div>
         </div>
       </div>
 
       {/* Investigation Forensic Report Card */}
-      {result && (
+      {result && matchDisplay && (
         <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-6 shadow-sm">
           {/* Card Top: Indicator Details & Triage Classification */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-800">
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <span className="text-xs font-mono text-slate-400">SUBMITTED INDICATOR:</span>
+                <span className="text-xs font-mono text-slate-400">
+                  {result.type === 'domain' ? 'SUBMITTED DOMAIN:' : 'SUBMITTED INDICATOR:'}
+                </span>
                 <span className="text-lg font-mono font-bold text-white">{result.indicator}</span>
                 <span className="text-[11px] font-mono uppercase px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-cyan-400">
                   {result.type}
+                </span>
+
+                {/* Validation Status Badge */}
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                  {result.validationStatus || 'Format Validated'}
                 </span>
 
                 {/* Source Origin Distinction Tag */}
@@ -406,16 +504,25 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
                 )}
               </div>
 
-              <div className="text-xs text-slate-400 flex items-center gap-3">
+              <div className="text-xs text-slate-400 flex flex-wrap items-center gap-3">
                 <span>Ref ID: <strong className="font-mono text-slate-300">{result.investigationId}</strong></span>
                 <span aria-hidden="true">·</span>
                 <span>Timestamp: <strong className="font-mono text-slate-300">{new Date(result.timestamp).toUTCString()}</strong></span>
+                {result.resolvedIps && result.resolvedIps.length > 0 && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      DNS Resolved IP{result.resolvedIps.length > 1 ? 's' : ''}:{' '}
+                      <strong className="font-mono text-cyan-300">{result.resolvedIps.join(', ')}</strong>
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
               <div className="text-right">
-                <span className="text-[11px] font-mono text-slate-400 block">RISK CLASSIFICATION</span>
+                <span className="text-[11px] font-mono text-slate-400 block">SEVERITY LEVEL</span>
                 <span className={`text-xs font-mono font-bold px-3 py-1 rounded border inline-block ${getSeverityBadge(result.severity)}`}>
                   {result.severity}
                 </span>
@@ -429,6 +536,22 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
               </button>
             </div>
           </div>
+
+          {/* Database / Diagnostics Warnings (non-fatal partial lookup notices) */}
+          {(result.databaseStatus?.error || (result.diagnostics?.warnings && result.diagnostics.warnings.length > 0)) && (
+            <div className="p-3.5 rounded-lg bg-amber-950/30 border border-amber-700/50 text-amber-200 text-xs space-y-1.5">
+              <div className="font-mono font-bold text-amber-300 flex items-center gap-2">
+                <Database className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>INVESTIGATION DIAGNOSTICS & PROVIDER NOTICES</span>
+              </div>
+              {result.databaseStatus?.error && (
+                <p className="text-amber-200">{result.databaseStatus.error}</p>
+              )}
+              {result.diagnostics?.warnings?.map((w, idx) => (
+                <p key={idx} className="text-slate-300">• {w}</p>
+              ))}
+            </div>
+          )}
 
           {/* Multi-Source Correlation Summary Banner */}
           {result.comparison && (
@@ -506,27 +629,18 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-4 rounded-lg bg-slate-950 border border-slate-800">
               <span className="text-[11px] font-mono text-slate-400 block mb-1">THREAT MATCH STATUS</span>
-              <div className="text-sm font-bold text-white flex items-center gap-1.5">
-                {result.matchStatus === 'Known Indicator Match' ? (
-                  <span className="text-amber-400 flex items-center gap-1">
-                    <ShieldAlert className="w-4 h-4" />
-                    Known Threat Match
-                  </span>
-                ) : (
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <Info className="w-4 h-4" />
-                    {result.matchStatus}
-                  </span>
-                )}
+              <div className={`text-sm font-bold flex items-center gap-1.5 ${matchDisplay.colorClass}`}>
+                {matchDisplay.icon}
+                <span>{matchDisplay.label}</span>
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block">
-                {result.matchStatus === 'Known Indicator Match' ? 'Confirmed by intel database/feeds' : 'No threat record found'}
+                {matchDisplay.sub}
               </span>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950 border border-slate-800">
               <span className="text-[11px] font-mono text-slate-400 block mb-1">THREAT CATEGORY</span>
-              <div className="text-sm font-bold text-cyan-300 truncate">
+              <div className="text-sm font-bold text-cyan-300 truncate" title={result.category}>
                 {result.category}
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block">
@@ -540,17 +654,17 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
                 {result.source}
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block font-mono">
-                Attribution Channel
+                {result.databaseStatus?.provider || 'Attribution Channel'}
               </span>
             </div>
 
             <div className="p-4 rounded-lg bg-slate-950 border border-slate-800">
-              <span className="text-[11px] font-mono text-slate-400 block mb-1">NETWORK ASN / GEO</span>
-              <div className="text-sm font-semibold text-slate-200 truncate font-mono">
-                {result.asn || 'AS Unspecified'}
+              <span className="text-[11px] font-mono text-slate-400 block mb-1">REPUTATION / ASN & GEO</span>
+              <div className="text-xs font-semibold text-slate-200 line-clamp-2" title={result.reputationInfo}>
+                {result.reputationInfo || result.asn || 'No reputation telemetry reported'}
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block font-mono">
-                Country: {result.country || 'N/A'}
+                {result.asn ? `${result.asn} · ` : ''}Country: {result.country || 'N/A'}
               </span>
             </div>
           </div>
@@ -561,7 +675,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
               <div className="flex items-center justify-between text-xs font-mono text-slate-300 font-bold">
                 <span className="flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-cyan-400" />
-                  LIVE THREAT INTELLIGENCE SOURCE BREAKDOWN
+                  PROVIDER LOOKUP STATUS & TELEMETRY
                 </span>
                 <span className="text-[11px] text-slate-400 font-normal">
                   Real-time public API queries
@@ -580,14 +694,30 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
                         {getFeedStatusBadge(feed.status)}
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
+                      {feed.resolvedIp && (
+                        <div className="mb-1.5 text-[10px] font-mono text-cyan-300 bg-cyan-950/40 border border-cyan-900/60 px-2 py-0.5 rounded inline-block">
+                          DNS Host IP: {feed.resolvedIp}
+                        </div>
+                      )}
+
+                      <p className="text-xs text-slate-300 leading-relaxed">
                         {feed.details}
                       </p>
+
+                      {feed.reputationSummary && (
+                        <p className="text-[11px] font-mono text-slate-400 mt-1.5">
+                          {feed.reputationSummary}
+                        </p>
+                      )}
                     </div>
 
                     <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
                       <span>
-                        {feed.confidence !== undefined ? `Confidence: ${feed.confidence}%` : feed.queryTimeMs ? `${feed.queryTimeMs}ms` : 'Public API'}
+                        {feed.confidence !== undefined
+                          ? `Confidence: ${feed.confidence}%`
+                          : feed.queryTimeMs !== undefined
+                          ? `${feed.queryTimeMs}ms`
+                          : 'Public API'}
                       </span>
                       {feed.attributionUrl && (
                         <a
@@ -610,7 +740,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
           <div className="p-4 rounded-lg bg-slate-950 border border-slate-800">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-white font-mono">
               <FileText className="w-4 h-4 text-cyan-400" />
-              <span>RECORDED FORENSIC EVIDENCE & ADVISORY FINDINGS</span>
+              <span>MATCHING EVIDENCE & FORENSIC OBSERVATIONS</span>
             </div>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
               {result.evidence}
@@ -638,7 +768,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
               ) : (
                 <>
                   <li><strong>Baseline Logging:</strong> Maintain normal syslog stream.</li>
-                  <li><strong>Zero-Trust Advisory:</strong> An unmatched indicator is NOT verified clean; continue standard host EDR monitoring.</li>
+                  <li><strong>Zero-Trust Advisory:</strong> An unmatched or incomplete indicator lookup is NOT verified safe; continue standard host EDR and DNS monitoring.</li>
                 </>
               )}
             </ul>

@@ -66,7 +66,8 @@ export async function analyzeNetworkLog(
       let liveFeeds: LiveFeedSource[] = [];
       if (!skipLiveFeeds) {
         try {
-          liveFeeds = await queryAllLiveFeeds(item.indicator, item.type);
+          const liveRes = await queryAllLiveFeeds(item.indicator, item.type);
+          liveFeeds = liveRes.feeds;
         } catch (e) {
           console.warn(`[LogAnalysis] Live feed query error for ${item.indicator}:`, e);
           liveFeeds = [];
@@ -78,7 +79,9 @@ export async function analyzeNetworkLog(
 
       if (isMatched) {
         threatMatchesCount++;
-        const correlation = correlateIntelligence(localThreat, liveFeeds);
+        const correlation = correlateIntelligence(localThreat, liveFeeds, {
+          liveFeedsEnabled: !skipLiveFeeds
+        });
         const severity: SeverityLevel = correlation.elevatedSeverity;
         const category = correlation.primaryCategory;
         const source = correlation.sourceAttribution;

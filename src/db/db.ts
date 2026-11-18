@@ -25,9 +25,20 @@ interface LocalDataStore {
 const DATA_DIR = path.resolve(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'threat_store.json');
 
+function sanitizeDbError(err: any): string {
+  const raw = err?.message || String(err || 'Unknown database error');
+  // Never leak connection strings, passwords, or tokens
+  return raw
+    .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, 'postgresql://[REDACTED]')
+    .replace(/password=[^\s&'"]+/gi, 'password=[REDACTED]');
+}
+
 class DatabaseManager {
   private pool: pg.Pool | null = null;
   private isPostgres = false;
+  private postgresConfigured = false;
+  private lastDbError: string | null = null;
+  private initPromise: Promise<void> | null = null;
   private localStore: LocalDataStore = {
     threats: [...INITIAL_DEMO_THREATS],
     history: [...INITIAL_DEMO_HISTORY],
@@ -36,22 +47,46 @@ class DatabaseManager {
   };
 
   constructor() {
-    this.init();
+    this.initPromise = this.init();
   }
 
-  private init() {
-    // Check if DATABASE_URL is set
-    const dbUrl = process.env.DATABASE_URL;
+  private async ensureInitialized(): Promise<void> {
+    if (this.initPromise) {
+      await this.initPromise;
+    }
+  }
+
+  private async init(): Promise<void> {
+    const rawDbUrl = process.env.DATABASE_URL;
+    const dbUrl = rawDbUrl ? rawDbUrl.trim().replace(/^["']|["']$/g, '') : '';
+
     if (dbUrl && (dbUrl.startsWith('postgres://') || dbUrl.startsWith('postgresql://'))) {
+      this.postgresConfigured = true;
       try {
+        const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
+        const requiresSsl = dbUrl.includes('sslmode=require') || dbUrl.includes('neon.tech') || process.env.NODE_ENV === 'production' || !isLocal;
+
         this.pool = new Pool({
           connectionString: dbUrl,
-          ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
-          connectionTimeoutMillis: 5000
+          ssl: requiresSsl ? { rejectUnauthorized: false } : undefined,
+          connectionTimeoutMillis: 6000,
+          idleTimeoutMillis: 15000,
+          max: 5
         });
-        this.initPostgresSchema();
+
+        // Prevent unhandled idle client errors (e.g., Neon serverless scale-to-zero disconnects) from crashing Node
+        this.pool.on('error', (err) => {
+          const safeMsg = sanitizeDbError(err);
+          console.error('[DB] PostgreSQL pool idle client error:', safeMsg);
+          this.lastDbError = safeMsg;
+        });
+
+        await this.initPostgresSchema();
       } catch (err) {
-        console.warn('[DB] Failed to initialize PostgreSQL pool, falling back to local store:', err);
+        const safeMsg = sanitizeDbError(err);
+        console.warn('[DB] Failed to initialize PostgreSQL pool, falling back to local store:', safeMsg);
+        this.lastDbError = safeMsg;
+        this.isPostgres = false;
         this.initLocalStore();
       }
     } else {
@@ -78,7 +113,7 @@ class DatabaseManager {
       // Save default seeds
       this.saveLocalStore();
     } catch (e) {
-      console.warn('[DB] Could not load or save local data file, keeping in-memory:', e);
+      console.warn('[DB] Could not load or save local data file, keeping in-memory:', sanitizeDbError(e));
     }
   }
 
@@ -88,8 +123,11 @@ class DatabaseManager {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
       fs.writeFileSync(DATA_FILE, JSON.stringify(this.localStore, null, 2), 'utf-8');
-    } catch (e) {
-      console.error('[DB] Error writing to data file:', e);
+    } catch (e: any) {
+      // On read-only serverless filesystems (e.g. Vercel /var/task), keep in-memory store silently
+      if (e?.code !== 'EROFS' && e?.code !== 'EACCES') {
+        console.error('[DB] Error writing to data file:', sanitizeDbError(e));
+      }
     }
   }
 
@@ -103,9 +141,9 @@ class DatabaseManager {
             id VARCHAR(64) PRIMARY KEY,
             indicator VARCHAR(255) NOT NULL UNIQUE,
             type VARCHAR(16) NOT NULL,
-            category VARCHAR(64) NOT NULL,
+            category VARCHAR(128) NOT NULL,
             severity VARCHAR(32) NOT NULL,
-            source VARCHAR(255) NOT NULL,
+            source TEXT NOT NULL,
             description TEXT NOT NULL,
             confidence INTEGER DEFAULT 80,
             asn VARCHAR(255) DEFAULT '',
@@ -120,9 +158,9 @@ class DatabaseManager {
             indicator VARCHAR(255) NOT NULL,
             type VARCHAR(16) NOT NULL,
             match_status VARCHAR(64) NOT NULL,
-            category VARCHAR(64) NOT NULL,
+            category VARCHAR(128) NOT NULL,
             severity VARCHAR(32) NOT NULL,
-            source VARCHAR(255) NOT NULL,
+            source TEXT NOT NULL,
             confidence INTEGER DEFAULT 0,
             evidence TEXT NOT NULL,
             asn VARCHAR(255) DEFAULT '',
@@ -139,10 +177,10 @@ class DatabaseManager {
             indicator VARCHAR(255) NOT NULL,
             type VARCHAR(16) NOT NULL,
             severity VARCHAR(32) NOT NULL,
-            category VARCHAR(64) NOT NULL,
+            category VARCHAR(128) NOT NULL,
             description TEXT NOT NULL,
             evidence TEXT DEFAULT '',
-            source VARCHAR(255) NOT NULL,
+            source TEXT NOT NULL,
             status VARCHAR(32) DEFAULT 'Active',
             occurrence_count INTEGER DEFAULT 1,
             created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -179,6 +217,22 @@ class DatabaseManager {
           ALTER TABLE SecurityAlerts ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ;
           ALTER TABLE SecurityAlerts ADD COLUMN IF NOT EXISTS reviewed_by VARCHAR(128);
           ALTER TABLE SecurityAlerts ADD COLUMN IF NOT EXISTS resolution_notes TEXT;
+
+          -- Safe column widening and constraint migration for existing Neon tables
+          ALTER TABLE ThreatIndicators ALTER COLUMN source TYPE TEXT;
+          ALTER TABLE ThreatIndicators ALTER COLUMN category TYPE VARCHAR(128);
+          ALTER TABLE InvestigationHistory ALTER COLUMN source TYPE TEXT;
+          ALTER TABLE InvestigationHistory ALTER COLUMN category TYPE VARCHAR(128);
+          ALTER TABLE SecurityAlerts ALTER COLUMN source TYPE TEXT;
+          ALTER TABLE SecurityAlerts ALTER COLUMN category TYPE VARCHAR(128);
+
+          ALTER TABLE InvestigationHistory DROP CONSTRAINT IF EXISTS investigationhistory_match_status_check;
+          ALTER TABLE InvestigationHistory ADD CONSTRAINT investigationhistory_match_status_check
+            CHECK (match_status IN ('Known Indicator Match', 'No Match Found', 'Lookup Failed', 'Insufficient Evidence'));
+
+          ALTER TABLE SecurityAlerts DROP CONSTRAINT IF EXISTS securityalerts_status_check;
+          ALTER TABLE SecurityAlerts ADD CONSTRAINT securityalerts_status_check
+            CHECK (status IN ('Active', 'Reviewed', 'Acknowledged', 'Resolved'));
         `);
 
         // Check if threats table is empty, seed if empty
@@ -208,23 +262,46 @@ class DatabaseManager {
           }
         }
         this.isPostgres = true;
+        this.lastDbError = null;
         console.log('[DB] Connected to PostgreSQL / Neon database successfully.');
       } finally {
         client.release();
       }
     } catch (err) {
-      console.warn('[DB] PostgreSQL initialization failed, using local store:', err);
+      const safeMsg = sanitizeDbError(err);
+      console.warn('[DB] PostgreSQL initialization failed, using local store:', safeMsg);
+      this.lastDbError = safeMsg;
       this.isPostgres = false;
       this.initLocalStore();
     }
   }
 
+  public getDiagnostics() {
+    return {
+      postgresConfigured: this.postgresConfigured,
+      isPostgres: this.isPostgres,
+      provider: this.isPostgres
+        ? 'PostgreSQL (Neon)'
+        : this.postgresConfigured
+        ? 'Local Fallback (PostgreSQL Connection Failed)'
+        : 'Local File Persistence (Neon Ready)',
+      lastDbError: this.lastDbError
+    };
+  }
+
   // --- HEALTH STATUS ---
   public async getStatus() {
+    await this.ensureInitialized();
     return {
-      connected: true,
-      provider: this.isPostgres ? 'PostgreSQL (Neon)' : 'Local File Persistence (Neon Ready)',
+      connected: !this.postgresConfigured || this.isPostgres,
+      provider: this.isPostgres
+        ? 'PostgreSQL (Neon)'
+        : this.postgresConfigured
+        ? 'PostgreSQL Connection Failed (Local Fallback Active)'
+        : 'Local File Persistence (Neon Ready)',
       isPostgres: this.isPostgres,
+      postgresConfigured: this.postgresConfigured,
+      dbError: this.lastDbError || undefined,
       threatCount: (await this.getThreats()).length,
       historyCount: (await this.getHistory()).length,
       alertCount: (await this.getAlerts()).length
@@ -233,6 +310,7 @@ class DatabaseManager {
 
   // --- THREAT INDICATORS ---
   public async getThreats(query?: string, category?: string, severity?: string, type?: string): Promise<ThreatIndicator[]> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         let sql = 'SELECT * FROM ThreatIndicators WHERE 1=1';
@@ -306,42 +384,82 @@ class DatabaseManager {
   }
 
   public async findThreatByIndicator(rawIndicator: string): Promise<ThreatIndicator | null> {
+    const result = await this.findThreatByIndicatorDetailed(rawIndicator);
+    return result.threat;
+  }
+
+  public async findThreatByIndicatorDetailed(rawIndicator: string): Promise<{
+    threat: ThreatIndicator | null;
+    dbConnected: boolean;
+    provider: string;
+    error?: string;
+  }> {
+    await this.ensureInitialized();
     const indicator = rawIndicator.trim().toLowerCase();
+
     if (this.isPostgres && this.pool) {
       try {
         const res = await this.pool.query(
           'SELECT * FROM ThreatIndicators WHERE LOWER(indicator) = $1 LIMIT 1',
           [indicator]
         );
+        this.lastDbError = null;
         if (res.rows.length > 0) {
           const r = res.rows[0];
           return {
-            id: r.id,
-            indicator: r.indicator,
-            type: r.type,
-            category: r.category,
-            severity: r.severity,
-            source: r.source,
-            description: r.description,
-            confidence: r.confidence,
-            asn: r.asn || '',
-            country: r.country || '',
-            isSynthetic: Boolean(r.is_synthetic),
-            createdAt: r.created_at,
-            updatedAt: r.updated_at
+            threat: {
+              id: r.id,
+              indicator: r.indicator,
+              type: r.type,
+              category: r.category,
+              severity: r.severity,
+              source: r.source,
+              description: r.description,
+              confidence: r.confidence,
+              asn: r.asn || '',
+              country: r.country || '',
+              isSynthetic: Boolean(r.is_synthetic),
+              createdAt: r.created_at,
+              updatedAt: r.updated_at
+            },
+            dbConnected: true,
+            provider: 'PostgreSQL (Neon)'
           };
         }
-        return null;
+        return {
+          threat: null,
+          dbConnected: true,
+          provider: 'PostgreSQL (Neon)'
+        };
       } catch (err) {
-        console.error('[DB] findThreatByIndicator Postgres error:', err);
+        const safeMsg = sanitizeDbError(err);
+        this.lastDbError = safeMsg;
+        console.error('[DB] findThreatByIndicator Postgres error:', safeMsg);
+        const match = this.localStore.threats.find(t => t.indicator.toLowerCase() === indicator) || null;
+        return {
+          threat: match,
+          dbConnected: false,
+          provider: 'PostgreSQL (Neon) — Query Failed',
+          error: `Database connection/query failed: ${safeMsg}`
+        };
       }
     }
 
-    const match = this.localStore.threats.find(t => t.indicator.toLowerCase() === indicator);
-    return match || null;
+    const match = this.localStore.threats.find(t => t.indicator.toLowerCase() === indicator) || null;
+    return {
+      threat: match,
+      dbConnected: !this.postgresConfigured,
+      provider: this.postgresConfigured
+        ? 'PostgreSQL (Neon) — Fallback to Local Seeds'
+        : 'Local Threat Repository',
+      error: this.postgresConfigured && this.lastDbError
+        ? `Database connection failed: ${this.lastDbError}`
+        : undefined
+    };
   }
 
   public async createThreat(threat: Omit<ThreatIndicator, 'id' | 'createdAt' | 'updatedAt'>): Promise<ThreatIndicator> {
+    await this.ensureInitialized();
     const newThreat: ThreatIndicator = {
       ...threat,
       id: `threat-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
@@ -389,6 +507,7 @@ class DatabaseManager {
   }
 
   public async updateThreat(id: string, updates: Partial<ThreatIndicator>): Promise<ThreatIndicator | null> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         const existing = await this.pool.query('SELECT * FROM ThreatIndicators WHERE id = $1', [id]);
@@ -452,6 +571,7 @@ class DatabaseManager {
   }
 
   public async deleteThreat(id: string): Promise<boolean> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         const res = await this.pool.query('DELETE FROM ThreatIndicators WHERE id = $1', [id]);
@@ -472,6 +592,7 @@ class DatabaseManager {
 
   // --- INVESTIGATION HISTORY ---
   public async getHistory(filters?: { query?: string; type?: string; severity?: string; category?: string }): Promise<InvestigationRecord[]> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         let sql = 'SELECT * FROM InvestigationHistory WHERE 1=1';
@@ -547,6 +668,7 @@ class DatabaseManager {
   }
 
   public async logInvestigation(record: Omit<InvestigationRecord, 'id' | 'timestamp'>): Promise<InvestigationRecord> {
+    await this.ensureInitialized();
     const newRecord: InvestigationRecord = {
       ...record,
       id: `inv-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
@@ -593,6 +715,7 @@ class DatabaseManager {
   }
 
   public async deleteHistory(id?: string): Promise<boolean> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         if (id) {
@@ -618,6 +741,7 @@ class DatabaseManager {
 
   // --- SECURITY ALERTS ---
   public async getAlerts(filters?: { status?: string; severity?: string; query?: string }): Promise<SecurityAlert[]> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         let sql = 'SELECT * FROM SecurityAlerts WHERE 1=1';
@@ -695,6 +819,7 @@ class DatabaseManager {
     evidence?: string;
     source: string;
   }): Promise<{ alert: SecurityAlert; isDuplicateSuppressed: boolean }> {
+    await this.ensureInitialized();
     const dedupWindowMinutes = parseInt(process.env.ALERT_DEDUP_MINUTES || '30', 10);
     const dedupWindowMs = dedupWindowMinutes * 60 * 1000;
     const now = new Date();
@@ -837,6 +962,7 @@ class DatabaseManager {
     analyst = 'SOC Analyst',
     resolutionNotes?: string
   ): Promise<SecurityAlert | null> {
+    await this.ensureInitialized();
     const nowIso = new Date().toISOString();
     const reviewedAt = status === 'Reviewed' || status === 'Resolved' ? nowIso : undefined;
     const reviewedBy = reviewedAt ? analyst : undefined;
@@ -937,6 +1063,7 @@ class DatabaseManager {
 
   // --- SEED RESET ---
   public async resetToDemoSeeds(): Promise<void> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         await this.pool.query('DELETE FROM SecurityAlerts');
@@ -1030,6 +1157,7 @@ class DatabaseManager {
   // MODULE 5: NETWORK LOG ANALYSES
   // ==========================================================================
   async saveLogAnalysis(session: LogAnalysisSession): Promise<LogAnalysisSession> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         await this.pool.query(
@@ -1083,6 +1211,7 @@ class DatabaseManager {
   }
 
   async getLogAnalyses(limit = 50): Promise<LogAnalysisSession[]> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         const res = await this.pool.query(
@@ -1121,6 +1250,7 @@ class DatabaseManager {
   }
 
   async getLogAnalysisById(id: string): Promise<LogAnalysisSession | null> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         const res = await this.pool.query(
@@ -1161,6 +1291,7 @@ class DatabaseManager {
   }
 
   async deleteLogAnalysis(id: string): Promise<boolean> {
+    await this.ensureInitialized();
     if (this.isPostgres && this.pool) {
       try {
         const res = await this.pool.query(`DELETE FROM NetworkLogAnalyses WHERE id = $1`, [id]);

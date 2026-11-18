@@ -68,10 +68,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 DATABASE_URL="postgres://neondb_owner:YOUR_PASSWORD@ep-cool-lake-123456.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
 # Public Threat Intelligence API Keys (Kept securely on backend)
+# URLhaus (abuse.ch) Auth Key (Free at https://auth.abuse.ch/)
+URLHAUS_API_KEY="YOUR_URLHAUS_API_KEY"
+
 # AbuseIPDB API Key (Free tier at https://www.abuseipdb.com/pricing)
 ABUSEIPDB_API_KEY="YOUR_ABUSEIPDB_API_KEY"
 
-# AlienVault OTX API Key (Free at https://otx.alienvault.com/api)
+# AlienVault OTX API Key (Optional for public mode; free at https://otx.alienvault.com/api)
 OTX_API_KEY="YOUR_OTX_API_KEY"
 
 # Server Port
@@ -82,9 +85,9 @@ CREATE TABLE IF NOT EXISTS ThreatIndicators (
     id VARCHAR(64) PRIMARY KEY,
     indicator VARCHAR(255) NOT NULL UNIQUE,
     type VARCHAR(16) NOT NULL CHECK (type IN ('ip', 'domain')),
-    category VARCHAR(64) NOT NULL,
+    category VARCHAR(128) NOT NULL,
     severity VARCHAR(32) NOT NULL CHECK (severity IN ('HIGH RISK', 'MEDIUM RISK', 'LOW RISK', 'UNKNOWN')),
-    source VARCHAR(255) NOT NULL,
+    source TEXT NOT NULL,
     description TEXT NOT NULL,
     confidence INTEGER DEFAULT 80,
     asn VARCHAR(255) DEFAULT '',
@@ -100,9 +103,9 @@ CREATE TABLE IF NOT EXISTS InvestigationHistory (
     indicator VARCHAR(255) NOT NULL,
     type VARCHAR(16) NOT NULL CHECK (type IN ('ip', 'domain')),
     match_status VARCHAR(64) NOT NULL,
-    category VARCHAR(64) NOT NULL,
+    category VARCHAR(128) NOT NULL,
     severity VARCHAR(32) NOT NULL,
-    source VARCHAR(255) NOT NULL,
+    source TEXT NOT NULL,
     confidence INTEGER DEFAULT 0,
     evidence TEXT NOT NULL,
     asn VARCHAR(255) DEFAULT '',
@@ -120,9 +123,9 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
     indicator VARCHAR(255) NOT NULL,
     type VARCHAR(16) NOT NULL,
     severity VARCHAR(32) NOT NULL,
-    category VARCHAR(64) NOT NULL,
+    category VARCHAR(128) NOT NULL,
     description TEXT NOT NULL,
-    source VARCHAR(255) NOT NULL,
+    source TEXT NOT NULL,
     status VARCHAR(32) DEFAULT 'Active',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     acknowledged_at TIMESTAMPTZ
@@ -169,17 +172,24 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
   };
 
   const pingLiveFeed = async () => {
-    setLivePingMessage('Testing live query to URLhaus public API...');
+    setLivePingMessage('Testing live query to configured public threat feeds...');
     try {
-      const res = await api.analyze('8.8.8.8', 'ip', 'Ping test for live feeds');
-      const urlhausFeed = res.liveFeeds?.find((f) => f.id === 'urlhaus');
+      await loadFeedsStatus();
+      const res = await api.analyze('google.com', 'domain', 'Ping test for live domain feeds');
+      const summary = (res.liveFeeds || [])
+        .map((f) => `${f.name}: ${f.status.replace(/_/g, ' ')}`)
+        .join(' | ');
       setLivePingMessage(
-        `✓ URLhaus API Connected (${urlhausFeed?.queryTimeMs || 420}ms response): Status "${urlhausFeed?.status}". Backend integration layer functioning.`
+        `✓ Live feed diagnostics complete (${res.matchStatus}). ${summary}`
       );
     } catch (err: any) {
       setLivePingMessage(`✗ Live feed ping failed: ${err.message}`);
     }
   };
+
+  const urlhausStatus = liveFeeds.find((f) => f.id === 'urlhaus')?.status;
+  const abuseStatus = liveFeeds.find((f) => f.id === 'abuseipdb')?.status;
+  const otxStatus = liveFeeds.find((f) => f.id === 'otx')?.status;
 
   const scenarios = [
     {
@@ -195,16 +205,16 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
       desc: 'Covert IPv6 exfiltration beacon'
     },
     {
-      title: 'Scenario 3: Valid Domain Name',
+      title: 'Scenario 3: Valid Domain Name (Local Match)',
       indicator: 'secure-bank-login-update.com',
       type: 'domain' as IndicatorType,
       desc: 'Active banking credential harvester'
     },
     {
-      title: 'Scenario 4: Live URLhaus / OTX Domain Check',
-      indicator: 'payload-delivery-cdn.net',
+      title: 'Scenario 4: Public Domain Check (google.com)',
+      indicator: 'google.com',
       type: 'domain' as IndicatorType,
-      desc: 'Lumma stealer malware distribution host'
+      desc: 'Public domain live DNS + OTX/URLhaus/AbuseIPDB lookup'
     },
     {
       title: 'Scenario 5: Clean Public IP (Zero-Trust Unknown)',
@@ -249,7 +259,8 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
           <div className="flex items-center gap-2">
             <button
               onClick={pingLiveFeed}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 rounded-lg transition-colors shadow-xs"
+              disabled={isLoadingFeeds}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 disabled:opacity-50 rounded-lg transition-colors shadow-xs"
             >
               <Activity className="w-3.5 h-3.5" />
               <span>Test Live Feeds Ping</span>
@@ -269,18 +280,22 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-white text-xs">URLhaus (abuse.ch)</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  Active (Open API)
+                <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
+                  urlhausStatus?.includes('Configured')
+                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                    : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                }`}>
+                  {urlhausStatus || 'Key: URLHAUS_API_KEY'}
                 </span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Free open REST API tracking malicious malware URLs and active distribution domain hosts globally. Requires no key.
+                Abuse.ch REST API tracking malicious malware URLs and distribution domain hosts globally. Requires a free Auth-Key (<span className="font-mono text-slate-300">URLHAUS_API_KEY</span>).
               </p>
             </div>
             <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
               <span>Supports: IP & Domain</span>
               <a
-                href="https://urlhaus.abuse.ch/api/"
+                href="https://urlhaus-api.abuse.ch/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-cyan-400 hover:underline inline-flex items-center gap-1"
@@ -295,16 +310,20 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-white text-xs">AbuseIPDB</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                  Key: ABUSEIPDB_API_KEY
+                <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
+                  abuseStatus?.includes('Configured')
+                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                    : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
+                }`}>
+                  {abuseStatus || 'Key: ABUSEIPDB_API_KEY'}
                 </span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                IP reputation, ISP geolocation, and confidence scoring calculated over a 90-day multi-reporter observation window.
+                IP reputation, ISP geolocation, and confidence scoring (90-day window). Domains are safely resolved via DNS to public IPs before checking.
               </p>
             </div>
             <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-              <span>Supports: IPv4 & IPv6</span>
+              <span>Supports: IP & Resolved Domain IP</span>
               <a
                 href="https://www.abuseipdb.com/api.html"
                 target="_blank"
@@ -322,11 +341,11 @@ CREATE TABLE IF NOT EXISTS SecurityAlerts (
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-white text-xs">AlienVault OTX</span>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  Active (Public Mode)
+                  {otxStatus || 'Active (Public Mode)'}
                 </span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Open Threat Exchange community pulses detailing adversary tactics, malware campaigns, and malicious IOCs.
+                Open Threat Exchange community pulses detailing adversary tactics, malware campaigns, and malicious IOCs (optional <span className="font-mono text-slate-300">OTX_API_KEY</span>).
               </p>
             </div>
             <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">

@@ -715,6 +715,7 @@ export const NetworkLogAnalysisView: React.FC<NetworkLogAnalysisViewProps> = ({
                   <option value="all">All Match Statuses</option>
                   <option value="Known Indicator Match">Threat Matches Only</option>
                   <option value="No Match Found">Unmatched Only</option>
+                  <option value="Insufficient Evidence">Insufficient Evidence</option>
                   <option value="Lookup Failed">Failures Only</option>
                 </select>
 
@@ -871,6 +872,10 @@ export const NetworkLogAnalysisView: React.FC<NetworkLogAnalysisViewProps> = ({
                             ) : item.matchStatus === 'Lookup Failed' ? (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-950 text-amber-300 border border-amber-800">
                                 Lookup Failed
+                              </span>
+                            ) : item.matchStatus === 'Insufficient Evidence' ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-950/70 text-amber-200 border border-amber-800/70">
+                                Insufficient Evidence
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">

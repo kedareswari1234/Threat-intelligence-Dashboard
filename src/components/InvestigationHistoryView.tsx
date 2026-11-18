@@ -274,7 +274,15 @@ export const InvestigationHistoryView: React.FC<InvestigationHistoryViewProps> =
                   </td>
                   <td className="py-3 px-3 uppercase text-slate-400">{rec.type}</td>
                   <td className="py-3 px-3">
-                    <span className={rec.matchStatus === 'Known Indicator Match' ? 'text-amber-300 font-medium' : 'text-slate-400'}>
+                    <span
+                      className={
+                        rec.matchStatus === 'Known Indicator Match'
+                          ? 'text-rose-300 font-medium'
+                          : rec.matchStatus === 'Lookup Failed' || rec.matchStatus === 'Insufficient Evidence'
+                          ? 'text-amber-300 font-medium'
+                          : 'text-slate-400'
+                      }
+                    >
                       {rec.matchStatus}
                     </span>
                   </td>

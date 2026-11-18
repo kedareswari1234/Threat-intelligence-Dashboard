@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,31 +20,39 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = parseInt(process.env.PORT || '3000', 10);
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // ============================================================================
 // API ROUTES
 // ============================================================================
+
+function hasRealKey(val: string | undefined, placeholders: string[]): boolean {
+  if (!val) return false;
+  const trimmed = val.trim().replace(/^["']|["']$/g, '');
+  if (!trimmed) return false;
+  return !placeholders.some((p) => trimmed.toUpperCase() === p.toUpperCase());
+}
 
 // 1. Health & Database Connectivity
 app.get('/api/health', async (_req: Request, res: Response) => {
   try {
     const status = await db.getStatus();
     res.json({
-      status: 'ok',
+      status: status.connected ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
       ...status
     });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('[API /api/health] error:', error?.message);
+    res.status(500).json({ status: 'error', message: 'Database health check failed.' });
   }
 });
 
 // 1B. Live Threat Intelligence Feeds Status
 app.get('/api/live-feeds/status', (_req: Request, res: Response) => {
-  const hasURLhaus = Boolean(process.env.URLHAUS_API_KEY && process.env.URLHAUS_API_KEY !== 'MY_URLHAUS_KEY');
-  const hasAbuseIPDB = Boolean(process.env.ABUSEIPDB_API_KEY && process.env.ABUSEIPDB_API_KEY !== 'MY_ABUSEIPDB_KEY');
-  const hasOTX = Boolean(process.env.OTX_API_KEY && process.env.OTX_API_KEY !== 'MY_OTX_KEY');
+  const hasURLhaus = hasRealKey(process.env.URLHAUS_API_KEY, ['MY_URLHAUS_KEY', 'YOUR_URLHAUS_API_KEY']);
+  const hasAbuseIPDB = hasRealKey(process.env.ABUSEIPDB_API_KEY, ['MY_ABUSEIPDB_KEY', 'YOUR_ABUSEIPDB_API_KEY']);
+  const hasOTX = hasRealKey(process.env.OTX_API_KEY, ['MY_OTX_KEY', 'YOUR_OTX_API_KEY']);
 
   res.json({
     feeds: [
@@ -52,7 +60,7 @@ app.get('/api/live-feeds/status', (_req: Request, res: Response) => {
         id: 'urlhaus',
         name: 'URLhaus (abuse.ch)',
         type: 'Malware & Domain Host API',
-        status: hasURLhaus ? 'Configured (Auth Key)' : 'Auth Key Required',
+        status: hasURLhaus ? 'Configured (Auth Key)' : 'Auth Key Missing',
         requiresKey: true,
         supports: ['domain', 'ip'],
         description: 'Malware URL and distribution domain host tracker from abuse.ch'
@@ -63,8 +71,8 @@ app.get('/api/live-feeds/status', (_req: Request, res: Response) => {
         type: 'IP Reputation API',
         status: hasAbuseIPDB ? 'Configured' : 'Key Not Set',
         requiresKey: true,
-        supports: ['ip'],
-        description: 'Crowdsourced IP abuse reports and confidence scoring (90-day window)'
+        supports: ['ip', 'domain (via DNS IP resolution)'],
+        description: 'Crowdsourced IP abuse reports and confidence scoring (90-day window; resolves domains to IP safely)'
       },
       {
         id: 'otx',
@@ -81,9 +89,9 @@ app.get('/api/live-feeds/status', (_req: Request, res: Response) => {
 
 // 2. Validate Indicator Only (Quick syntax check)
 app.post('/api/validate', (req: Request, res: Response) => {
-  const { indicator, type } = req.body;
-  if (!indicator) {
-    res.status(400).json({ isValid: false, error: 'Indicator is required' });
+  const { indicator, type } = req.body || {};
+  if (!indicator || typeof indicator !== 'string') {
+    res.status(400).json({ isValid: false, error: 'Indicator string is required.' });
     return;
   }
   const result = validateIndicator(indicator, type);
@@ -93,9 +101,23 @@ app.post('/api/validate', (req: Request, res: Response) => {
 // 3. Analyze Indicator (Validation + DB Threat Lookup + Live Public Feeds + Correlation)
 app.post('/api/analyze', async (req: Request, res: Response) => {
   try {
-    const { indicator, type, analyst, notes, skipLiveFeeds } = req.body;
-    if (!indicator || typeof indicator !== 'string') {
-      res.status(400).json({ error: 'Indicator string is required.' });
+    const { indicator, type, analyst, notes, skipLiveFeeds } = req.body || {};
+    if (!indicator || typeof indicator !== 'string' || !indicator.trim()) {
+      res.status(400).json({
+        error: 'Indicator string is required.',
+        code: 'MISSING_INDICATOR'
+      });
+      return;
+    }
+
+    const preCheck = validateIndicator(indicator, type);
+    if (!preCheck.isValid) {
+      const label = type === 'domain' ? 'Invalid domain format' : type === 'ip' ? 'Invalid IP format' : 'Invalid indicator format';
+      res.status(400).json({
+        error: `${label}: ${preCheck.error || 'Malformed indicator.'}`,
+        code: 'INVALID_FORMAT',
+        validation: preCheck
+      });
       return;
     }
 
@@ -108,8 +130,13 @@ app.post('/api/analyze', async (req: Request, res: Response) => {
 
     res.json(analysis);
   } catch (error: any) {
-    console.error('[API /api/analyze] error:', error);
-    res.status(500).json({ error: 'Internal analysis error occurred.' });
+    const safeMessage = (error?.message || 'Unexpected internal analysis error.')
+      .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, '[REDACTED_DB_URL]');
+    console.error('[API /api/analyze] unhandled error:', safeMessage);
+    res.status(500).json({
+      error: `Analysis backend error: ${safeMessage}`,
+      code: 'ANALYSIS_BACKEND_ERROR'
+    });
   }
 });
 
@@ -372,6 +399,24 @@ app.get('/api/logs/sample/:sampleType', (req: Request, res: Response) => {
   } else {
     res.status(400).json({ error: 'Unknown sample type. Options: firewall, web-proxy, vpc-flow' });
   }
+});
+
+// JSON 404 & Error handlers scoped to /api/*
+app.use('/api', (req: Request, res: Response) => {
+  res.status(404).json({
+    error: `API endpoint not found: ${req.method} ${req.originalUrl}`,
+    code: 'ENDPOINT_NOT_FOUND'
+  });
+});
+
+app.use('/api', (err: any, _req: Request, res: Response, _next: NextFunction) => {
+  const safeMsg = (err?.message || 'Internal server error')
+    .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, '[REDACTED_DB_URL]');
+  console.error('[API Global Error]', safeMsg);
+  res.status(err?.status || 500).json({
+    error: safeMsg,
+    code: 'INTERNAL_SERVER_ERROR'
+  });
 });
 
 // ============================================================================
